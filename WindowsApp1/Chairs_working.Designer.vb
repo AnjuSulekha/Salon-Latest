@@ -26,6 +26,8 @@ Partial Class Chairs_working
         Me.Panel__Chair = New System.Windows.Forms.Panel()
         Me.Chair_ID = New System.Windows.Forms.Label()
         Me.Chair__ID = New System.Windows.Forms.Label()
+        Me.Status = New System.Windows.Forms.Label()
+        Me.Staff_ID = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Label1
@@ -66,12 +68,32 @@ Partial Class Chairs_working
         Me.Chair__ID.TabIndex = 3
         Me.Chair__ID.Text = "Label2"
         '
+        'Status
+        '
+        Me.Status.AutoSize = True
+        Me.Status.Location = New System.Drawing.Point(462, 17)
+        Me.Status.Name = "Status"
+        Me.Status.Size = New System.Drawing.Size(39, 13)
+        Me.Status.TabIndex = 4
+        Me.Status.Text = "Label2"
+        '
+        'Staff_ID
+        '
+        Me.Staff_ID.AutoSize = True
+        Me.Staff_ID.Location = New System.Drawing.Point(525, 17)
+        Me.Staff_ID.Name = "Staff_ID"
+        Me.Staff_ID.Size = New System.Drawing.Size(39, 13)
+        Me.Staff_ID.TabIndex = 5
+        Me.Staff_ID.Text = "Label2"
+        '
         'Chairs_working
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(784, 411)
+        Me.Controls.Add(Me.Staff_ID)
+        Me.Controls.Add(Me.Status)
         Me.Controls.Add(Me.Chair__ID)
         Me.Controls.Add(Me.Chair_ID)
         Me.Controls.Add(Me.Label1)
@@ -87,4 +109,6 @@ Partial Class Chairs_working
     Friend WithEvents Label1 As Label
     Friend WithEvents Chair_ID As Label
     Friend WithEvents Chair__ID As Label
+    Friend WithEvents Status As Label
+    Friend WithEvents Staff_ID As Label
 End Class

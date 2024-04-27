@@ -8,6 +8,7 @@ Public Class Inactive
     Dim ButtonWidh As Integer
     Dim ButtonHeight As Integer
     Dim ButtonPadding As Integer
+    Dim dr As OleDbDataReader
     Private Sub Inactive_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
 
@@ -42,7 +43,7 @@ Public Class Inactive
             cmd = con.CreateCommand
             If con.State = ConnectionState.Closed Then con.Open()
 
-            cmd.CommandText = "SELECT ChairName, ChairType, StaffName, Status FROM  Chair where Status=0"
+            cmd.CommandText = "SELECT ID,ChairName, ChairType, StaffName, Status FROM  Chair where Status=0"
 
 
             Using reader As OleDbDataReader = cmd.ExecuteReader()
@@ -94,7 +95,7 @@ Public Class Inactive
     '    ButtonPadding = 10
     '    FunlistChairs()
     'End Sub
-    Private Sub FunlistChairs()
+    Public Sub FunlistChairs()
         Dim Ls As New List(Of Label)
         For i As Integer = 0 To DT.Rows.Count - 1
             Dim B As New Button
@@ -107,9 +108,9 @@ Public Class Inactive
             B.Width = ButtonWidh
             B.Left = (i Mod 4) * (ButtonWidh + ButtonPadding)
             B.Top = (i \ 4) * (ButtonHeight + ButtonPadding)
-            B.Text = DT.Rows(i).Item("ChairName").ToString
+            B.Text = DT.Rows(i).Item("ChairName").ToString &
+            Environment.NewLine & Environment.NewLine & "ID: " & DT.Rows(i).Item("ID").ToString
             ' B.Text = DT.Rows(i).Item("Status").ToString
-
             L.Width = B.Width
             L.Height = 15
             L.Left = B.Left + 5
@@ -132,14 +133,6 @@ Public Class Inactive
             L1.BackColor = Color.Red
             L1.ForeColor = Color.White
             L1.BringToFront()
-            'Dim chairImage As Image = My.Resources.NewChair ' Replace "NewChair" with the name of your image resource
-            'B.Image = chairImage
-            'B.ImageAlign = ContentAlignment.MiddleCenter ' Set image alignment to center
-            'B.TextImageRelation = TextImageRelation.ImageAboveText ' Display image above the text
-            'B.BackColor = Color.Transparent ' Set the background color of the button as transparent
-            'B.FlatStyle = FlatStyle.Flat ' Set flat style to prevent any default button borders
-            'B.FlatAppearance.BorderSize = 0 ' Set the border size to 0 to remove any border
-
             If DT.Rows(i).Item("Status") = 1 Then
                 B.BackColor = Color.Honeydew
                 L.Text = "Active"
@@ -150,6 +143,7 @@ Public Class Inactive
                 L.Text = "InActive"
                 B.BackColor = Color.Gray
             End If
+            B.Tag = DT.Rows(i).Item("ID").ToString
             ' Set tag property of the button to hold the index of the current row
             B.Tag = i
             ' Add label to the list
@@ -157,7 +151,6 @@ Public Class Inactive
             Dim path As New System.Drawing.Drawing2D.GraphicsPath()
             Dim cornerRadius As Integer = 5 ' Adjust the radius to control the roundness of the corners
             Dim rect As New Rectangle(0, 0, B.Width, B.Height)
-
             ' Top-left corner
             path.AddArc(rect.Left, rect.Top, cornerRadius * 2, cornerRadius * 2, 180, 90)
             ' Top-right corner
@@ -167,13 +160,11 @@ Public Class Inactive
             ' Bottom-left corner
             path.AddArc(rect.Left, rect.Bottom - cornerRadius * 2, cornerRadius * 2, cornerRadius * 2, 90, 90)
             path.CloseFigure()
-
             B.Region = New Region(path)
-
-
             AddHandler B.Click, AddressOf Button_Click
         Next
     End Sub
+
 
 
     '' Constructor to accept reference to chri_staff form
@@ -182,28 +173,45 @@ Public Class Inactive
     '    Me.chairStaffForm = Chair_Staff
     'End Sub
     Private Sub Button_Click(ByVal sender As Object, ByVal e As System.EventArgs)
+        Dim B As Button = sender
+        IsCreated(B.Tag) = True
+        Dim buttonText As String = B.Text
+        Dim chairID As String = buttonText.Split(" ")(1).Trim()
+        BtnDataGrid_Frm.Id.Text = chairID
+        BtnOptions.Chair_Opt.Text = chairID
+        'Chair__ID.Text = chairID
+        Dim chairStatus As String = FetchChairStatus(chairID)
+        Dim btn As Button = DirectCast(sender, Button)
+        Dim parentCenterX As Integer = btn.Parent.Width \ 2
+        Dim parentCenterY As Integer = btn.Parent.Height \ 2
+        ' Calculate the position to center BtnDataGrid_Frm
+        Dim btnDataGridCenterX As Integer = parentCenterX - (BtnDataGrid_Frm.Width \ 2)
+        Dim btnDataGridCenterY As Integer = parentCenterY - (BtnDataGrid_Frm.Height \ 2)
+        BtnDataGrid_Frm.TopLevel = False
+        btn.Parent.Controls.Add(BtnDataGrid_Frm)
+        BtnDataGrid_Frm.Show()
+        BtnDataGrid_Frm.BringToFront()
 
-        'Dim B As Button = DirectCast(sender, Button)
-        'Dim index As Integer = CInt(B.Tag)
-
-        '' Retrieve the label associated with the clicked button from the list
-        'Dim Ls As List(Of Label) = Panel__Chair.Controls.OfType(Of Label)().ToList()
-        'Dim statusLabel As Label = Ls(index)
-        'If DT.Rows(index).Item("Status").ToString() = "0" Then
-        '    ' Check if the form is not already open
-        '    If Not IsFormOpen(GetType(Chair_Staff)) Then
-        '        ' Load another form
-        '        Dim chairStaffForm As New Chair_Staff()
-        '        chairStaffForm.TopLevel = False
-        '        Panel__Chair.Controls.Add(chairStaffForm)
-        '        Dim centerX As Integer = Panel__Chair.Width \ 2 - chairStaffForm.Width \ 2
-        '        Dim centerY As Integer = Panel__Chair.Height \ 2 - chairStaffForm.Height \ 2
-        '        chairStaffForm.Location = New Point(centerX, centerY)
-        '        chairStaffForm.BringToFront()
-        '        chairStaffForm.Show()
-        '    End If
-        'End If
     End Sub
+    Private Function FetchChairStatus(ByVal chairID As String) As String
+        Try
+            con.ConnectionString = ConString
+            cmd = con.CreateCommand
+            If con.State = ConnectionState.Closed Then con.Open()
+            cmd.CommandText = "SELECT Status FROM Chair WHERE ID =chairID "
+            dr = cmd.ExecuteReader()
+            Dim status As String = ""
+            If dr.Read() Then
+                status = dr("Status").ToString()
+                'status = .ToString()
+            End If
+            dr.Close()
+            Return status
+        Catch ex As Exception
+        Finally
+            con.Close()
+        End Try
+    End Function
     Private Function IsFormOpen(formType As Type) As Boolean
         For Each form As Form In Application.OpenForms
             If form.GetType() = formType Then

@@ -66,6 +66,7 @@ Partial Class Form1
         '
         'FlowLayoutPanel1
         '
+        Me.FlowLayoutPanel1.AutoScroll = True
         Me.FlowLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(58, Byte), Integer), CType(CType(71, Byte), Integer))
         Me.FlowLayoutPanel1.Controls.Add(Me.Panel8)
         Me.FlowLayoutPanel1.Controls.Add(Me.Btn_DashBoard)

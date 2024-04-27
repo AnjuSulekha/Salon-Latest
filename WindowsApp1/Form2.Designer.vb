@@ -22,10 +22,10 @@ Partial Class Form2
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.Main_Panel = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -33,22 +33,22 @@ Partial Class Form2
         Me.DataGridView2 = New System.Windows.Forms.DataGridView()
         Me.Label23 = New System.Windows.Forms.Label()
         Me.Panel17 = New System.Windows.Forms.Panel()
-        Me.Panel_Card = New System.Windows.Forms.Panel()
-        Me.Label19 = New System.Windows.Forms.Label()
         Me.Panel_Expense = New System.Windows.Forms.Panel()
         Me.Label20 = New System.Windows.Forms.Label()
         Me.Panel_Cash = New System.Windows.Forms.Panel()
         Me.Label21 = New System.Windows.Forms.Label()
         Me.Panel_Total = New System.Windows.Forms.Panel()
         Me.Label22 = New System.Windows.Forms.Label()
+        Me.Panel_Card = New System.Windows.Forms.Panel()
+        Me.Label19 = New System.Windows.Forms.Label()
         Me.Main_Panel.SuspendLayout()
         Me.Panel_Chairs.SuspendLayout()
         CType(Me.DataGridView2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel17.SuspendLayout()
-        Me.Panel_Card.SuspendLayout()
         Me.Panel_Expense.SuspendLayout()
         Me.Panel_Cash.SuspendLayout()
         Me.Panel_Total.SuspendLayout()
+        Me.Panel_Card.SuspendLayout()
         Me.SuspendLayout()
         '
         'Main_Panel
@@ -104,9 +104,9 @@ Partial Class Form2
         Me.DataGridView2.AllowUserToDeleteRows = False
         Me.DataGridView2.AllowUserToResizeColumns = False
         Me.DataGridView2.AllowUserToResizeRows = False
-        DataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(246, Byte), Integer), CType(CType(227, Byte), Integer))
-        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(246, Byte), Integer), CType(CType(227, Byte), Integer))
-        Me.DataGridView2.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(246, Byte), Integer), CType(CType(227, Byte), Integer))
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(246, Byte), Integer), CType(CType(227, Byte), Integer))
+        Me.DataGridView2.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridView2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -115,36 +115,36 @@ Partial Class Form2
         Me.DataGridView2.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.DataGridView2.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None
         Me.DataGridView2.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(246, Byte), Integer), CType(CType(227, Byte), Integer))
-        DataGridViewCellStyle6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(246, Byte), Integer), CType(CType(227, Byte), Integer))
-        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridView2.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(246, Byte), Integer), CType(CType(227, Byte), Integer))
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(246, Byte), Integer), CType(CType(227, Byte), Integer))
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridView2.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.DataGridView2.ColumnHeadersHeight = 40
         Me.DataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle7.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle7.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle7.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.White
-        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridView2.DefaultCellStyle = DataGridViewCellStyle7
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.White
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridView2.DefaultCellStyle = DataGridViewCellStyle3
         Me.DataGridView2.EnableHeadersVisualStyles = False
         Me.DataGridView2.Location = New System.Drawing.Point(429, -1)
         Me.DataGridView2.Name = "DataGridView2"
         Me.DataGridView2.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
-        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle8.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle8.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.White
-        DataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridView2.RowHeadersDefaultCellStyle = DataGridViewCellStyle8
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle4.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.White
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridView2.RowHeadersDefaultCellStyle = DataGridViewCellStyle4
         Me.DataGridView2.RowHeadersVisible = False
         Me.DataGridView2.RowTemplate.Height = 50
         Me.DataGridView2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
@@ -177,27 +177,6 @@ Partial Class Form2
         Me.Panel17.Name = "Panel17"
         Me.Panel17.Size = New System.Drawing.Size(722, 128)
         Me.Panel17.TabIndex = 5
-        '
-        'Panel_Card
-        '
-        Me.Panel_Card.BackColor = System.Drawing.Color.FromArgb(CType(CType(27, Byte), Integer), CType(CType(156, Byte), Integer), CType(CType(252, Byte), Integer))
-        Me.Panel_Card.Controls.Add(Me.Label19)
-        Me.Panel_Card.ForeColor = System.Drawing.Color.White
-        Me.Panel_Card.Location = New System.Drawing.Point(542, 14)
-        Me.Panel_Card.Name = "Panel_Card"
-        Me.Panel_Card.Size = New System.Drawing.Size(170, 100)
-        Me.Panel_Card.TabIndex = 2
-        '
-        'Label19
-        '
-        Me.Label19.AutoSize = True
-        Me.Label19.Font = New System.Drawing.Font("Segoe UI", 11.25!)
-        Me.Label19.Location = New System.Drawing.Point(21, 16)
-        Me.Label19.Name = "Label19"
-        Me.Label19.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.Label19.Size = New System.Drawing.Size(45, 20)
-        Me.Label19.TabIndex = 1
-        Me.Label19.Text = "Card"
         '
         'Panel_Expense
         '
@@ -262,6 +241,27 @@ Partial Class Form2
         Me.Label22.TabIndex = 0
         Me.Label22.Text = "Total"
         '
+        'Panel_Card
+        '
+        Me.Panel_Card.BackColor = System.Drawing.Color.FromArgb(CType(CType(27, Byte), Integer), CType(CType(156, Byte), Integer), CType(CType(252, Byte), Integer))
+        Me.Panel_Card.Controls.Add(Me.Label19)
+        Me.Panel_Card.ForeColor = System.Drawing.Color.White
+        Me.Panel_Card.Location = New System.Drawing.Point(542, 14)
+        Me.Panel_Card.Name = "Panel_Card"
+        Me.Panel_Card.Size = New System.Drawing.Size(170, 100)
+        Me.Panel_Card.TabIndex = 2
+        '
+        'Label19
+        '
+        Me.Label19.AutoSize = True
+        Me.Label19.Font = New System.Drawing.Font("Segoe UI", 11.25!)
+        Me.Label19.Location = New System.Drawing.Point(21, 16)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.Label19.Size = New System.Drawing.Size(45, 20)
+        Me.Label19.TabIndex = 1
+        Me.Label19.Text = "Card"
+        '
         'Form2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -275,14 +275,14 @@ Partial Class Form2
         Me.Panel_Chairs.ResumeLayout(False)
         CType(Me.DataGridView2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel17.ResumeLayout(False)
-        Me.Panel_Card.ResumeLayout(False)
-        Me.Panel_Card.PerformLayout()
         Me.Panel_Expense.ResumeLayout(False)
         Me.Panel_Expense.PerformLayout()
         Me.Panel_Cash.ResumeLayout(False)
         Me.Panel_Cash.PerformLayout()
         Me.Panel_Total.ResumeLayout(False)
         Me.Panel_Total.PerformLayout()
+        Me.Panel_Card.ResumeLayout(False)
+        Me.Panel_Card.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub

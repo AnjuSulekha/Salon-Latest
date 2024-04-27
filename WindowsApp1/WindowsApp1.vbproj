@@ -113,6 +113,12 @@
     <Compile Include="Chair_Main.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Choose_Product.Designer.vb">
+      <DependentUpon>Choose_Product.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Choose_Product.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Close_Workfrm.Designer.vb">
       <DependentUpon>Close_Workfrm.vb</DependentUpon>
     </Compile>
@@ -217,6 +223,9 @@
     <EmbeddedResource Include="Chair_Main.resx">
       <DependentUpon>Chair_Main.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Choose_Product.resx">
+      <DependentUpon>Choose_Product.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Close_Workfrm.resx">
       <DependentUpon>Close_Workfrm.vb</DependentUpon>
     </EmbeddedResource>
@@ -293,6 +302,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8-password-481.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\trash.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

@@ -1,5 +1,6 @@
 ﻿Imports System.Data.OleDb
 Imports System.Drawing.Drawing2D
+Imports System.Threading
 
 Public Class BtnOptions
     Dim DT As New DataTable
@@ -15,6 +16,11 @@ Public Class BtnOptions
         Btn_Start.ForeColor = Color.White
         Btn_Stop.ForeColor = Color.White
         Btn_Cancel.ForeColor = Color.White
+        'Chair_Opt.Visible = False
+        'Start_Time.Visible = False
+        'Stop_Time.Visible = False
+        'Staffid.Text = BtnDataGrid_Frm.Label2
+
     End Sub
     Private Sub SetRoundedButton(ByVal button As Button, ByVal cornerRadius As Integer)
         button.FlatAppearance.BorderSize = 0
@@ -63,6 +69,61 @@ Public Class BtnOptions
     End Sub
 
     Private Sub Btn_Start_Click(sender As Object, e As EventArgs) Handles Btn_Start.Click
+        Dim currentTime As String = DateTime.Now.ToString("HH:mm:ss")
+        '  Dim startTime As TimeSpan = currentTime.TimeOfDay
+        Start_Time.Text = currentTime
+        Try
+            con.ConnectionString = ConString
+            cmd = con.CreateCommand
+            If con.State = ConnectionState.Closed Then con.Open()
+            cmd.CommandText = "update Chair set Status=2,StartTime='" & Start_Time.Text & "' where ID=" & Chair_Opt.Text & ""
+            cmd.ExecuteNonQuery()
+            'Chairs_working.RefreshChairsStatus()
+            Me.Close()
+        Catch ex As Exception
+            MessageBox.Show("Error: " & ex.Message)
+        Finally
+            con.Close()
+        End Try
+    End Sub
 
+    Private Sub Btn_Stop_Click(sender As Object, e As EventArgs) Handles Btn_Stop.Click
+        Close_Workfrm.lbl_Chairid.Text = Chair_Opt.Text
+        Dim result As DialogResult = MessageBox.Show("Do you want to close the work?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+        ' Check if the user clicked Yes
+        If result = DialogResult.Yes Then
+            Close_Workfrm.CloseWrk_ChairId.Text = Chair_Opt.Text
+            Dim currentTime As String = DateTime.Now.ToString("HH:mm:ss")
+            '  Dim endTime As TimeSpan = currentTime.TimeOfDay
+            Stop_Time.Text = currentTime
+            Try
+                con.ConnectionString = ConString
+                cmd = con.CreateCommand
+                If con.State = ConnectionState.Closed Then con.Open()
+                cmd.CommandText = "update Chair set Status=0 ,EndTime='" & Stop_Time.Text & "' WHERE ID=" & Chair_Opt.Text & "" '"
+                cmd.ExecuteNonQuery()
+                con.Close()
+
+                If con.State = ConnectionState.Closed Then con.Open()
+                cmd = con.CreateCommand
+                cmd.CommandText = "Update  StaffMaster set Work_Status=0 where Chair_ID =" & Chair_Opt.Text & ""
+                cmd.ExecuteNonQuery()
+                con.Close()
+                Thread.Sleep(2000)
+                'Chairs_working.RefreshChairsStatus()
+                Me.Close()
+
+                Close_Workfrm.MdiParent = Form1
+                Close_Workfrm.Show()
+                Close_Workfrm.BringToFront()
+
+            Catch ex As Exception
+                MessageBox.Show("Error: " & ex.Message)
+            Finally
+
+                con.Close()
+            End Try
+        End If
     End Sub
 End Class

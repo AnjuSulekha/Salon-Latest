@@ -24,6 +24,9 @@ Partial Class Working
     Private Sub InitializeComponent()
         Me.Panel__Chair = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.Chair__ID = New System.Windows.Forms.Label()
+        Me.lbl_Status = New System.Windows.Forms.Label()
+        Me.Stop_Time = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Panel__Chair
@@ -43,12 +46,42 @@ Partial Class Working
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "In Woking"
         '
+        'Chair__ID
+        '
+        Me.Chair__ID.AutoSize = True
+        Me.Chair__ID.Location = New System.Drawing.Point(707, 23)
+        Me.Chair__ID.Name = "Chair__ID"
+        Me.Chair__ID.Size = New System.Drawing.Size(39, 13)
+        Me.Chair__ID.TabIndex = 3
+        Me.Chair__ID.Text = "Label2"
+        '
+        'lbl_Status
+        '
+        Me.lbl_Status.AutoSize = True
+        Me.lbl_Status.Location = New System.Drawing.Point(663, 23)
+        Me.lbl_Status.Name = "lbl_Status"
+        Me.lbl_Status.Size = New System.Drawing.Size(39, 13)
+        Me.lbl_Status.TabIndex = 4
+        Me.lbl_Status.Text = "Label2"
+        '
+        'Stop_Time
+        '
+        Me.Stop_Time.AutoSize = True
+        Me.Stop_Time.Location = New System.Drawing.Point(613, 23)
+        Me.Stop_Time.Name = "Stop_Time"
+        Me.Stop_Time.Size = New System.Drawing.Size(39, 13)
+        Me.Stop_Time.TabIndex = 5
+        Me.Stop_Time.Text = "Label2"
+        '
         'Working
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(784, 411)
+        Me.Controls.Add(Me.Stop_Time)
+        Me.Controls.Add(Me.lbl_Status)
+        Me.Controls.Add(Me.Chair__ID)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Panel__Chair)
         Me.Name = "Working"
@@ -60,4 +93,7 @@ Partial Class Working
 
     Friend WithEvents Panel__Chair As Panel
     Friend WithEvents Label1 As Label
+    Friend WithEvents Chair__ID As Label
+    Friend WithEvents lbl_Status As Label
+    Friend WithEvents Stop_Time As Label
 End Class

@@ -26,6 +26,10 @@ Partial Class BtnOptions
         Me.Btn_Start = New System.Windows.Forms.Button()
         Me.Btn_Stop = New System.Windows.Forms.Button()
         Me.Btn_Cancel = New System.Windows.Forms.Button()
+        Me.Chair_Opt = New System.Windows.Forms.Label()
+        Me.Start_Time = New System.Windows.Forms.Label()
+        Me.Stop_Time = New System.Windows.Forms.Label()
+        Me.Staffid = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Label1
@@ -77,11 +81,51 @@ Partial Class BtnOptions
         Me.Btn_Cancel.Text = "Cancel"
         Me.Btn_Cancel.UseVisualStyleBackColor = False
         '
+        'Chair_Opt
+        '
+        Me.Chair_Opt.AutoSize = True
+        Me.Chair_Opt.Location = New System.Drawing.Point(236, 13)
+        Me.Chair_Opt.Name = "Chair_Opt"
+        Me.Chair_Opt.Size = New System.Drawing.Size(39, 13)
+        Me.Chair_Opt.TabIndex = 4
+        Me.Chair_Opt.Text = "Label2"
+        '
+        'Start_Time
+        '
+        Me.Start_Time.AutoSize = True
+        Me.Start_Time.Location = New System.Drawing.Point(258, 45)
+        Me.Start_Time.Name = "Start_Time"
+        Me.Start_Time.Size = New System.Drawing.Size(39, 13)
+        Me.Start_Time.TabIndex = 5
+        Me.Start_Time.Text = "Label2"
+        '
+        'Stop_Time
+        '
+        Me.Stop_Time.AutoSize = True
+        Me.Stop_Time.Location = New System.Drawing.Point(258, 65)
+        Me.Stop_Time.Name = "Stop_Time"
+        Me.Stop_Time.Size = New System.Drawing.Size(39, 13)
+        Me.Stop_Time.TabIndex = 6
+        Me.Stop_Time.Text = "Label2"
+        '
+        'Staffid
+        '
+        Me.Staffid.AutoSize = True
+        Me.Staffid.Location = New System.Drawing.Point(257, 92)
+        Me.Staffid.Name = "Staffid"
+        Me.Staffid.Size = New System.Drawing.Size(39, 13)
+        Me.Staffid.TabIndex = 7
+        Me.Staffid.Text = "Label2"
+        '
         'BtnOptions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(309, 240)
+        Me.Controls.Add(Me.Staffid)
+        Me.Controls.Add(Me.Stop_Time)
+        Me.Controls.Add(Me.Start_Time)
+        Me.Controls.Add(Me.Chair_Opt)
         Me.Controls.Add(Me.Btn_Cancel)
         Me.Controls.Add(Me.Btn_Stop)
         Me.Controls.Add(Me.Btn_Start)
@@ -97,4 +141,8 @@ Partial Class BtnOptions
     Friend WithEvents Btn_Start As Button
     Friend WithEvents Btn_Stop As Button
     Friend WithEvents Btn_Cancel As Button
+    Friend WithEvents Chair_Opt As Label
+    Friend WithEvents Start_Time As Label
+    Friend WithEvents Stop_Time As Label
+    Friend WithEvents Staffid As Label
 End Class

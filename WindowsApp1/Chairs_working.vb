@@ -1,5 +1,6 @@
 ﻿'Imports Microsoft.Office.Interop.Excel
 Imports System.Data.OleDb
+Imports System.Diagnostics.Eventing
 Imports System.Runtime.InteropServices
 
 Public Class Chairs_working
@@ -10,7 +11,7 @@ Public Class Chairs_working
     Dim ButtonWidh As Integer
     Dim ButtonHeight As Integer
     Dim ButtonPadding As Integer
-
+    Dim dr As OleDbDataReader
     ' Dim L As New Label
     'Public L As New Label
     'Public B As New Button
@@ -25,8 +26,10 @@ Public Class Chairs_working
             ButtonHeight = 60
             ButtonPadding = 15
             FunlistChairs()
-            Chair_ID.Visible = True
-            Chair__ID.Visible = True
+            Chair_ID.Visible = False
+            Chair__ID.Visible = False
+            Staff_ID.Visible = False
+            Status.Visible = False
             ' DataGridAdd("")
         Catch ex As Exception
             ' Handle any exceptions that may occur during the loading process
@@ -35,7 +38,7 @@ Public Class Chairs_working
             ' Perform any cleanup or finalization tasks if necessary
         End Try
     End Sub
-    Private Sub FetchDataFromDatabase()
+    Public Sub FetchDataFromDatabase()
         Try
             con.ConnectionString = ConString
             cmd = con.CreateCommand
@@ -141,15 +144,19 @@ Public Class Chairs_working
         Next
     End Sub
 
-
+    Dim workStatus As Integer
     Private Sub Button_Click(ByVal sender As Object, ByVal e As System.EventArgs)
-        Dim workStatus As Integer = checkstatus()
+
         Dim B As Button = sender
         IsCreated(B.Tag) = True
         Dim buttonText As String = B.Text
         Dim chairID As String = buttonText.Split(" ")(1).Trim()
         BtnDataGrid_Frm.Id.Text = chairID
+        BtnOptions.Chair_Opt.Text = chairID
         Chair__ID.Text = chairID
+
+        Dim chairStatus As String = FetchChairStatus(chairID)
+        Status.Text = chairStatus
         Dim btn As Button = DirectCast(sender, Button)
         Dim parentCenterX As Integer = btn.Parent.Width \ 2
         Dim parentCenterY As Integer = btn.Parent.Height \ 2
@@ -157,48 +164,60 @@ Public Class Chairs_working
         Dim btnDataGridCenterX As Integer = parentCenterX - (BtnDataGrid_Frm.Width \ 2)
         Dim btnDataGridCenterY As Integer = parentCenterY - (BtnDataGrid_Frm.Height \ 2)
         ' Set the location of BtnDataGrid_Frm
-        If workStatus <> 0 Then
-            BtnDataGrid_Frm.Hide()
-            BtnOptions.TopLevel = False
-            btn.Parent.Controls.Add(BtnOptions)
-            BtnOptions.Show()
-            BtnOptions.BringToFront()
-        Else
-            'BtnDataGrid_Frm.Location = New Point(btnDataGridCenterX, btnDataGridCenterY)
-            'BtnDataGrid_Frm.Location = New Point(btn.Left, btn.Top + btn.Height)
+        If chairStatus = 0 Then
             BtnOptions.Hide()
             BtnDataGrid_Frm.TopLevel = False
             btn.Parent.Controls.Add(BtnDataGrid_Frm)
             BtnDataGrid_Frm.Show()
             BtnDataGrid_Frm.BringToFront()
+
+        ElseIf chairStatus <> 0 Then
+            'If chairStatus = 1 Then
+            '    B.BackColor = Color.Honeydew
+            'ElseIf chairStatus = 2 Then
+            '    B.BackColor = Color.Green
+            'End If
+
+            BtnDataGrid_Frm.Hide()
+            BtnOptions.TopLevel = False
+            btn.Parent.Controls.Add(BtnOptions)
+            BtnOptions.Show()
+            BtnOptions.BringToFront()
+
         End If
     End Sub
+    Public Sub RefreshChairs()
+        ' Clear existing controls in the panel
+        ClearChairControls()
+        ' Regenerate chair buttons and labels
+        FunlistChairs()
+    End Sub
 
-    Private Function checkstatus() As Integer
-        Dim query As String = "SELECT Status FROM Chair WHERE ID = @ChairID"
-        Dim workStatus As Integer = 0
+    Public Sub ClearChairControls()
+        ' Clear existing controls in the panel
+        Panel__Chair.Controls.Clear()
+    End Sub
+
+    Private Function FetchChairStatus(ByVal chairID As String) As String
         Try
-            Using connection As New OleDbConnection(ConString)
-                Using command As New OleDbCommand(query, connection)
-                    ' Add parameter for Chair_ID
-                    command.Parameters.AddWithValue("@ChairID", Chair__ID.Text)
-
-                    connection.Open()
-
-                    Dim result As Object = command.ExecuteScalar()
-
-                    If result IsNot Nothing AndAlso result IsNot DBNull.Value Then
-                        ' Convert the result to integer and assign it to workStatus
-                        workStatus = Convert.ToInt32(result)
-                    End If
-                End Using
-            End Using
+            con.ConnectionString = ConString
+            cmd = con.CreateCommand
+            If con.State = ConnectionState.Closed Then con.Open()
+            cmd.CommandText = "SELECT Status FROM Chair WHERE ID =" & Chair__ID.Text & " "
+            dr = cmd.ExecuteReader()
+            Dim status As String = ""
+            If dr.Read() Then
+                status = dr("Status").ToString()
+                'status = .ToString()
+            End If
+            dr.Close()
+            Return status
         Catch ex As Exception
-            MessageBox.Show("Error: " & ex.Message)
+        Finally
+            con.Close()
         End Try
-
-        Return workStatus
     End Function
+
     Private Function IsFormOpen(formType As Type) As Boolean
         For Each form As Form In Application.OpenForms
             If form.GetType() = formType Then
@@ -220,4 +239,48 @@ Public Class Chairs_working
             BtnDataGrid_Frm.Close()
         End If
     End Sub
+
+
+
+
+
+    Public Sub RefreshChairsStatus()
+        ' Clear existing chair data
+        DT.Clear()
+        ' Fetch updated chair data from the database
+        FetchDataFromDatabase()
+        ' Update UI to reflect the updated chair status
+        UpdateChairsUI()
+    End Sub
+
+    Private Sub UpdateChairsUI()
+        ' Loop through each button in the panel and update its status
+        For Each ctrl As Control In Panel__Chair.Controls
+            If TypeOf ctrl Is Button Then
+                Dim chairButton As Button = DirectCast(ctrl, Button)
+                Dim chairID As String = chairButton.Tag.ToString()
+                Dim chairStatus As String = FetchChairStatus(chairID)
+                UpdateChairButton(chairButton, chairStatus)
+            End If
+        Next
+    End Sub
+
+    Private Sub UpdateChairButton(chairButton As Button, chairStatus As String)
+        ' Update the button color and status label based on the chair status
+        If chairStatus = "1" Then
+            chairButton.BackColor = Color.Honeydew
+            chairButton.Controls("StatusLabel").Text = "Active"
+        ElseIf chairStatus = "2" Then
+            chairButton.BackColor = Color.Green
+            chairButton.Controls("StatusLabel").Text = "Working"
+        Else
+            chairButton.BackColor = Color.Gray
+            chairButton.Controls("StatusLabel").Text = "Inactive"
+        End If
+    End Sub
+
+
+
+
+
 End Class
