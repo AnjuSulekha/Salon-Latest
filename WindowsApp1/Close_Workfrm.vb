@@ -4,6 +4,8 @@ Imports System.IO
 Imports System.Net
 Imports System.Security.Cryptography
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
+Imports iTextSharp.text
+Imports iTextSharp.text.pdf
 Public Class Close_Workfrm
     Dim con As New OleDbConnection
     Dim cmd As New OleDbCommand
@@ -72,7 +74,7 @@ Public Class Close_Workfrm
                 If Not String.IsNullOrEmpty(imagePath) AndAlso File.Exists(imagePath) Then
                     ' Load image only if the file path is not empty and the file exists
                     Me.PictureBox1.SizeMode = PictureBoxSizeMode.StretchImage
-                    Me.PictureBox1.Image = Image.FromFile(imagePath)
+                    ' Me.PictureBox1.Image = Image.FromFile(imagePath)
                 End If
             End If
             reader.Close()
@@ -214,41 +216,80 @@ Public Class Close_Workfrm
         Try
             Using con As New OleDbConnection(ConString)
                 con.Open()
-                'Dim entryDate As DateTime = DateTime.Now
-                Dim amount As Decimal = Decimal.Parse(Txt_GrandTotal.Text)
-
+                Dim entryDate As DateTime = DateTime.Today
+                '   Dim amount As Decimal = Decimal.Parse(Txt_GrandTotal.Text)
+                ' lbl_Date.Text = entryDate.ToString("yyyy-MM-dd")
+                If String.IsNullOrWhiteSpace(Txt_Service.Text) Then
+                    MsgBox("Service Charge is Required.")
+                    Txt_Service.Focus()
+                    Return
+                End If
+                Dim itemName As String ' Assuming ItemName is in the first column (index 0)
+                Dim rate As String  ' Assuming Rate is in the second column (index 1)
+                Dim quantity As String
                 For Each row As DataGridViewRow In DT_CLOSE.Rows
-                    Dim itemName As String = row.Cells(0).Value.ToString() ' Assuming ItemName is in the first column (index 0)
-                    Dim rate As String = row.Cells(1).Value.ToString() ' Assuming Rate is in the second column (index 1)
-                    Dim quantity As String = row.Cells(2).Value.ToString() ' Assuming Quantity is in the third column (index 2)
-                    '  Dim amount As String = row.Cells(3).Value.ToString() ' Assuming Amount is in the fourth column (index 3)
-
-                    Dim cmdText As String = "INSERT INTO Bill_Details (ItemName, Rate, Qty,Amount) VALUES (@ItemName, @Rate, @Qty,@Amount)"
-                    Using cmd As New OleDbCommand(cmdText, con)
-                        'cmd.Parameters.AddWithValue("@EntryDate", entryDate)EntryDate,@EntryDate,
-                        cmd.Parameters.AddWithValue("@ItemName", itemName)
-                        cmd.Parameters.AddWithValue("@Rate", rate)
-                        cmd.Parameters.AddWithValue("@Qty", quantity)
-                        cmd.Parameters.AddWithValue("@Amount", Txt_GrandTotal.Text) ', Amount,, @Amount
-                        cmd.ExecuteNonQuery()
-                    End Using
+                    itemName = row.Cells(0).Value.ToString() ' Assuming ItemName is in the first column (index 0)
+                    rate = row.Cells(1).Value.ToString() ' Assuming Rate is in the second column (index 1)
+                    quantity = row.Cells(2).Value.ToString() ' Assuming Quantity is in the third column (index 2)
                 Next
+                Dim cmdText As String = "INSERT INTO Bill_Details (EntryDate,ItemName, Rate, Qty,Amount) VALUES (@EntryDate,@ItemName, @Rate, @Qty,@Amount)"
+                Using cmd As New OleDbCommand(cmdText, con)
+                    cmd.Parameters.AddWithValue("@EntryDate", entryDate) 'EntryDate,@EntryDate,
+                    cmd.Parameters.AddWithValue("@ItemName", itemName)
+                    cmd.Parameters.AddWithValue("@Rate", rate)
+                    cmd.Parameters.AddWithValue("@Qty", quantity)
+                    cmd.Parameters.AddWithValue("@Amount", Txt_GrandTotal.Text) ', Amount,, @Amount
+                    cmd.ExecuteNonQuery()
+                End Using
+
                 con.Close()
+                If con.State = ConnectionState.Closed Then con.Open()
+                cmd = con.CreateCommand()
+                cmd.CommandText = "UPDATE StaffMaster SET Chair_ID = 0 WHERE StaffID = @StaffID"
+                cmd.Parameters.AddWithValue("@StaffID", lbl_Staffid.Text)
+                cmd.ExecuteNonQuery()
+                con.Close()
+                If con.State = ConnectionState.Closed Then con.Open()
+                cmd = con.CreateCommand()
+                cmd.CommandText = "UPDATE Chair SET StaffName=NULL WHERE ID=@ID"
+                cmd.Parameters.AddWithValue("@ID", CloseWrk_ChairId.Text)
+                cmd.ExecuteNonQuery()
+                con.Close()
+                ' Generate PDF
+                Dim fileName As String = "Bill.pdf"
+                Dim filePath As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), fileName)
+
+                Using fs As New FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None)
+                    Using doc As New Document()
+                        Using writer As PdfWriter = PdfWriter.GetInstance(doc, fs)
+                            doc.Open()
+
+                            ' Add bill details to the PDF
+                            doc.Add(New Paragraph("Bill Details"))
+                            doc.Add(New Paragraph($"Entry Date: {entryDate.ToString("yyyy-MM-dd")}"))
+                            doc.Add(New Paragraph($"Service Charge: {Txt_Service.Text}"))
+                            doc.Add(New Paragraph($"Bill Amount: {Txt_Bill.Text}"))
+                            doc.Add(New Paragraph($"Start Time: {Txt_Start.Text}"))
+                            doc.Add(New Paragraph($"End Time: {Txt_End.Text}"))
+
+                            ' Add items from DataGridView to the PDF
+                            'doc.Add(New Paragraph("Items:"))
+                            'For Each row As DataGridViewRow In DT_CLOSE.Rows
+                            '    Dim itemName As String = row.Cells(0).Value.ToString()
+                            '    Dim rate As String = row.Cells(1).Value.ToString()
+                            '    Dim quantity As String = row.Cells(2).Value.ToString()
+                            '    Dim amount As String = row.Cells(3).Value.ToString()
+                            '    doc.Add(New Paragraph($"Item: {itemName}, Rate: {rate}, Quantity: {quantity}, Amount: {amount}"))
+                            'Next
+                            doc.Close()
+                        End Using
+                    End Using
+                End Using
+
+                clear()
+                Me.Close()
             End Using
-            If con.State = ConnectionState.Closed Then con.Open()
-            cmd = con.CreateCommand()
-            cmd.CommandText = "UPDATE StaffMaster SET Chair_ID = 0 WHERE StaffID = @StaffID"
-            cmd.Parameters.AddWithValue("@StaffID", lbl_Staffid.Text)
-            cmd.ExecuteNonQuery()
-            con.Close()
-            If con.State = ConnectionState.Closed Then con.Open()
-            cmd = con.CreateCommand()
-            cmd.CommandText = "UPDATE Chair SET StaffName=NULL WHERE ID=@ID"
-            cmd.Parameters.AddWithValue("@ID", CloseWrk_ChairId.Text)
-            cmd.ExecuteNonQuery()
-            con.Close()
-            clear()
-            Me.Close()
+
         Catch ex As Exception
             MessageBox.Show("An error occurred: " & ex.Message)
             ' Handle exception
@@ -300,33 +341,33 @@ Public Class Close_Workfrm
     '            e.Handled = True
     '        End If
     '    End If
-    Private Sub DT_CLOSE_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles DT_CLOSE.CellPainting
-        ' Check if the cell being painted is in the "Delete" column and if the row index is valid
-        If dataLoaded = True Then
+    'Private Sub DT_CLOSE_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles DT_CLOSE.CellPainting
+    '    ' Check if the cell being painted is in the "Delete" column and if the row index is valid
+    '    If dataLoaded = True Then
 
-            If e.RowIndex >= 0 AndAlso DT_CLOSE.Columns.Contains("Delete") Then
-                Dim deleteColumnIndex As Integer = DT_CLOSE.Columns("Delete").Index
-                If e.ColumnIndex = deleteColumnIndex Then
-                    ' Get the delete icon image
-                    Dim deleteIcon As Image = My.Resources.trash ' Assuming "DeleteIcon" is the name of your delete icon resource
+    '        If e.RowIndex >= 0 AndAlso DT_CLOSE.Columns.Contains("Delete") Then
+    '            Dim deleteColumnIndex As Integer = DT_CLOSE.Columns("Delete").Index
+    '            If e.ColumnIndex = deleteColumnIndex Then
+    '                ' Get the delete icon image
+    '                Dim deleteIcon As Image = My.Resources.trash ' Assuming "DeleteIcon" is the name of your delete icon resource
 
-                    ' Calculate the position to draw the icon
-                    Dim iconX As Integer = e.CellBounds.Left + (e.CellBounds.Width - deleteIcon.Width) / 2 ' Center horizontally
-                    Dim iconY As Integer = e.CellBounds.Top + (e.CellBounds.Height - deleteIcon.Height) / 2 ' Center vertically
+    '                ' Calculate the position to draw the icon
+    '                Dim iconX As Integer = e.CellBounds.Left + (e.CellBounds.Width - deleteIcon.Width) / 2 ' Center horizontally
+    '                Dim iconY As Integer = e.CellBounds.Top + (e.CellBounds.Height - deleteIcon.Height) / 2 ' Center vertically
 
-                    ' Draw the cell's background
-                    e.PaintBackground(e.CellBounds, False)
+    '                ' Draw the cell's background
+    '                e.PaintBackground(e.CellBounds, False)
 
-                    ' Draw the icon to the center of the cell
-                    e.Graphics.DrawImage(deleteIcon, iconX, iconY)
+    '                ' Draw the icon to the center of the cell
+    '                e.Graphics.DrawImage(deleteIcon, iconX, iconY)
 
-                    ' Suppress default painting of the cell content
-                    e.Handled = True
-                End If
-            End If
+    '                ' Suppress default painting of the cell content
+    '                e.Handled = True
+    '            End If
+    '        End If
 
-        End If
-    End Sub
+    '    End If
+    'End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         Dim result As DialogResult = MessageBox.Show("Do you want to Close the form", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
@@ -353,5 +394,9 @@ Public Class Close_Workfrm
         TextBox9.Text = ""
         TextBox11.Text = ""
         PictureBox1.Image = Nothing
+    End Sub
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+
     End Sub
 End Class

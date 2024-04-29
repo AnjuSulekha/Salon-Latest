@@ -166,6 +166,7 @@ Public Class Chairs_working
         ' Set the location of BtnDataGrid_Frm
         If chairStatus = 0 Then
             BtnOptions.Hide()
+
             BtnDataGrid_Frm.TopLevel = False
             btn.Parent.Controls.Add(BtnDataGrid_Frm)
             BtnDataGrid_Frm.Show()
@@ -178,11 +179,18 @@ Public Class Chairs_working
             '    B.BackColor = Color.Green
             'End If
 
+
             BtnDataGrid_Frm.Hide()
             BtnOptions.TopLevel = False
             btn.Parent.Controls.Add(BtnOptions)
             BtnOptions.Show()
             BtnOptions.BringToFront()
+            If chairStatus = 1 Then
+                B.BackColor = Color.Honeydew
+            ElseIf chairStatus = 2 Then
+                B.BackColor = Color.Green
+
+            End If
 
         End If
     End Sub

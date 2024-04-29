@@ -70,6 +70,8 @@ Public Class BtnOptions
 
     Private Sub Btn_Start_Click(sender As Object, e As EventArgs) Handles Btn_Start.Click
         Dim currentTime As String = DateTime.Now.ToString("HH:mm:ss")
+
+        B.BackColor = Color.Green
         '  Dim startTime As TimeSpan = currentTime.TimeOfDay
         Start_Time.Text = currentTime
         Try

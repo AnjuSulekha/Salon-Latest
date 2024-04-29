@@ -22,10 +22,10 @@ Partial Class Close_Workfrm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Txt_Service = New System.Windows.Forms.TextBox()
         Me.Txt_Bill = New System.Windows.Forms.TextBox()
@@ -57,6 +57,11 @@ Partial Class Close_Workfrm
         Me.Btn_SaveBill = New System.Windows.Forms.Button()
         Me.CloseWrk_ChairId = New System.Windows.Forms.Label()
         Me.DT_CLOSE = New System.Windows.Forms.DataGridView()
+        Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.lbl_Chairid = New System.Windows.Forms.Label()
@@ -64,12 +69,9 @@ Partial Class Close_Workfrm
         Me.lbl_Staffid = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Txt_Discount = New System.Windows.Forms.TextBox()
-        Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Button2 = New System.Windows.Forms.Button()
+        Me.lbl_Date = New System.Windows.Forms.Label()
+        Me.Button4 = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         CType(Me.DT_CLOSE, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -248,7 +250,7 @@ Partial Class Close_Workfrm
         '
         'TextBox9
         '
-        Me.TextBox9.Location = New System.Drawing.Point(121, 432)
+        Me.TextBox9.Location = New System.Drawing.Point(121, 410)
         Me.TextBox9.Name = "TextBox9"
         Me.TextBox9.Size = New System.Drawing.Size(167, 20)
         Me.TextBox9.TabIndex = 21
@@ -256,7 +258,7 @@ Partial Class Close_Workfrm
         'Label11
         '
         Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(25, 435)
+        Me.Label11.Location = New System.Drawing.Point(25, 413)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(82, 13)
         Me.Label11.TabIndex = 20
@@ -264,7 +266,7 @@ Partial Class Close_Workfrm
         '
         'TextBox10
         '
-        Me.TextBox10.Location = New System.Drawing.Point(121, 455)
+        Me.TextBox10.Location = New System.Drawing.Point(121, 433)
         Me.TextBox10.Name = "TextBox10"
         Me.TextBox10.Size = New System.Drawing.Size(167, 20)
         Me.TextBox10.TabIndex = 23
@@ -272,7 +274,7 @@ Partial Class Close_Workfrm
         'Label12
         '
         Me.Label12.AutoSize = True
-        Me.Label12.Location = New System.Drawing.Point(25, 458)
+        Me.Label12.Location = New System.Drawing.Point(25, 436)
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(34, 13)
         Me.Label12.TabIndex = 22
@@ -280,7 +282,7 @@ Partial Class Close_Workfrm
         '
         'TextBox11
         '
-        Me.TextBox11.Location = New System.Drawing.Point(121, 479)
+        Me.TextBox11.Location = New System.Drawing.Point(121, 457)
         Me.TextBox11.Name = "TextBox11"
         Me.TextBox11.Size = New System.Drawing.Size(167, 20)
         Me.TextBox11.TabIndex = 25
@@ -288,7 +290,7 @@ Partial Class Close_Workfrm
         'Label13
         '
         Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(25, 487)
+        Me.Label13.Location = New System.Drawing.Point(25, 465)
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(44, 13)
         Me.Label13.TabIndex = 24
@@ -297,7 +299,7 @@ Partial Class Close_Workfrm
         'Label14
         '
         Me.Label14.AutoSize = True
-        Me.Label14.Location = New System.Drawing.Point(25, 416)
+        Me.Label14.Location = New System.Drawing.Point(297, 396)
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(32, 13)
         Me.Label14.TabIndex = 27
@@ -305,7 +307,7 @@ Partial Class Close_Workfrm
         '
         'Txt_Bank
         '
-        Me.Txt_Bank.Location = New System.Drawing.Point(121, 409)
+        Me.Txt_Bank.Location = New System.Drawing.Point(393, 389)
         Me.Txt_Bank.Name = "Txt_Bank"
         Me.Txt_Bank.Size = New System.Drawing.Size(167, 20)
         Me.Txt_Bank.TabIndex = 28
@@ -313,9 +315,9 @@ Partial Class Close_Workfrm
         '
         'Btn_SaveBill
         '
-        Me.Btn_SaveBill.Location = New System.Drawing.Point(393, 470)
+        Me.Btn_SaveBill.Location = New System.Drawing.Point(404, 470)
         Me.Btn_SaveBill.Name = "Btn_SaveBill"
-        Me.Btn_SaveBill.Size = New System.Drawing.Size(167, 39)
+        Me.Btn_SaveBill.Size = New System.Drawing.Size(75, 39)
         Me.Btn_SaveBill.TabIndex = 29
         Me.Btn_SaveBill.Text = "Save Bill"
         Me.Btn_SaveBill.UseVisualStyleBackColor = True
@@ -335,9 +337,9 @@ Partial Class Close_Workfrm
         Me.DT_CLOSE.AllowUserToDeleteRows = False
         Me.DT_CLOSE.AllowUserToResizeColumns = False
         Me.DT_CLOSE.AllowUserToResizeRows = False
-        DataGridViewCellStyle13.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(246, Byte), Integer), CType(CType(227, Byte), Integer))
-        DataGridViewCellStyle13.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(246, Byte), Integer), CType(CType(227, Byte), Integer))
-        Me.DT_CLOSE.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle13
+        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(246, Byte), Integer), CType(CType(227, Byte), Integer))
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(246, Byte), Integer), CType(CType(227, Byte), Integer))
+        Me.DT_CLOSE.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
         Me.DT_CLOSE.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -346,43 +348,68 @@ Partial Class Close_Workfrm
         Me.DT_CLOSE.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.DT_CLOSE.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None
         Me.DT_CLOSE.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
-        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle14.BackColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(130, Byte), Integer), CType(CType(128, Byte), Integer))
-        DataGridViewCellStyle14.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle14.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(130, Byte), Integer), CType(CType(128, Byte), Integer))
-        DataGridViewCellStyle14.SelectionForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DT_CLOSE.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle14
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(130, Byte), Integer), CType(CType(128, Byte), Integer))
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(130, Byte), Integer), CType(CType(128, Byte), Integer))
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DT_CLOSE.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.DT_CLOSE.ColumnHeadersHeight = 40
         Me.DT_CLOSE.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.DT_CLOSE.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3, Me.Column4, Me.Column5})
-        DataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle15.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle15.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle15.SelectionBackColor = System.Drawing.Color.White
-        DataGridViewCellStyle15.SelectionForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DT_CLOSE.DefaultCellStyle = DataGridViewCellStyle15
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.White
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DT_CLOSE.DefaultCellStyle = DataGridViewCellStyle3
         Me.DT_CLOSE.EnableHeadersVisualStyles = False
         Me.DT_CLOSE.Location = New System.Drawing.Point(12, 152)
         Me.DT_CLOSE.Name = "DT_CLOSE"
         Me.DT_CLOSE.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle16.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle16.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle16.SelectionBackColor = System.Drawing.Color.White
-        DataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DT_CLOSE.RowHeadersDefaultCellStyle = DataGridViewCellStyle16
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle4.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.White
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DT_CLOSE.RowHeadersDefaultCellStyle = DataGridViewCellStyle4
         Me.DT_CLOSE.RowHeadersVisible = False
         Me.DT_CLOSE.RowTemplate.Height = 50
         Me.DT_CLOSE.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.DT_CLOSE.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DT_CLOSE.Size = New System.Drawing.Size(566, 121)
+        Me.DT_CLOSE.Size = New System.Drawing.Size(566, 104)
         Me.DT_CLOSE.TabIndex = 32
+        '
+        'Column1
+        '
+        Me.Column1.HeaderText = "ItemName"
+        Me.Column1.Name = "Column1"
+        '
+        'Column2
+        '
+        Me.Column2.HeaderText = "Rate"
+        Me.Column2.Name = "Column2"
+        '
+        'Column3
+        '
+        Me.Column3.HeaderText = "Quantity"
+        Me.Column3.Name = "Column3"
+        '
+        'Column4
+        '
+        Me.Column4.HeaderText = "Amount"
+        Me.Column4.Name = "Column4"
+        '
+        'Column5
+        '
+        Me.Column5.HeaderText = "Delete"
+        Me.Column5.Name = "Column5"
         '
         'PictureBox1
         '
@@ -444,46 +471,41 @@ Partial Class Close_Workfrm
         Me.Txt_Discount.Size = New System.Drawing.Size(167, 20)
         Me.Txt_Discount.TabIndex = 38
         '
-        'Column1
-        '
-        Me.Column1.HeaderText = "ItemName"
-        Me.Column1.Name = "Column1"
-        '
-        'Column2
-        '
-        Me.Column2.HeaderText = "Rate"
-        Me.Column2.Name = "Column2"
-        '
-        'Column3
-        '
-        Me.Column3.HeaderText = "Quantity"
-        Me.Column3.Name = "Column3"
-        '
-        'Column4
-        '
-        Me.Column4.HeaderText = "Amount"
-        Me.Column4.Name = "Column4"
-        '
-        'Column5
-        '
-        Me.Column5.HeaderText = "Delete"
-        Me.Column5.Name = "Column5"
-        '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(312, 470)
+        Me.Button2.Location = New System.Drawing.Point(323, 470)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 39)
         Me.Button2.TabIndex = 39
         Me.Button2.Text = "Exit"
         Me.Button2.UseVisualStyleBackColor = True
         '
+        'lbl_Date
+        '
+        Me.lbl_Date.AutoSize = True
+        Me.lbl_Date.Location = New System.Drawing.Point(515, 9)
+        Me.lbl_Date.Name = "lbl_Date"
+        Me.lbl_Date.Size = New System.Drawing.Size(45, 13)
+        Me.lbl_Date.TabIndex = 40
+        Me.lbl_Date.Text = "Label15"
+        '
+        'Button4
+        '
+        Me.Button4.Location = New System.Drawing.Point(485, 470)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(75, 39)
+        Me.Button4.TabIndex = 41
+        Me.Button4.Text = "Print"
+        Me.Button4.UseVisualStyleBackColor = True
+        '
         'Close_Workfrm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(591, 537)
+        Me.ClientSize = New System.Drawing.Size(591, 520)
+        Me.Controls.Add(Me.Button4)
+        Me.Controls.Add(Me.lbl_Date)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Txt_Discount)
         Me.Controls.Add(Me.Label7)
@@ -576,4 +598,6 @@ Partial Class Close_Workfrm
     Friend WithEvents Column4 As DataGridViewTextBoxColumn
     Friend WithEvents Column5 As DataGridViewTextBoxColumn
     Friend WithEvents Button2 As Button
+    Friend WithEvents lbl_Date As Label
+    Friend WithEvents Button4 As Button
 End Class
