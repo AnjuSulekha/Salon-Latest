@@ -338,4 +338,11 @@ Public Class Form1
         Inactive.Show()
         Inactive.BringToFront()
     End Sub
+
+    Private Sub Btn_Timesheet_Click(sender As Object, e As EventArgs) Handles Btn_Timesheet.Click
+        TimeSheetReports.MdiParent = Me
+        TimeSheetReports.Show()
+        TimeSheetReports.BringToFront()
+
+    End Sub
 End Class

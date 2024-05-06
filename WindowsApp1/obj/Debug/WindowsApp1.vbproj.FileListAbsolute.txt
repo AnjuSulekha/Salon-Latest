@@ -31,3 +31,5 @@ D:\Dummy\Salon_Git\WindowsApp1\WindowsApp1\bin\Debug\BouncyCastle.Crypto.dll
 D:\Dummy\Salon_Git\WindowsApp1\WindowsApp1\bin\Debug\itextsharp.dll
 D:\Dummy\Salon_Git\WindowsApp1\WindowsApp1\bin\Debug\itextsharp.xml
 D:\Dummy\Salon_Git\WindowsApp1\WindowsApp1\obj\Debug\WindowsA.0BF81A2F.Up2Date
+D:\Dummy\Salon_Git\WindowsApp1\WindowsApp1\obj\Debug\WindowsApp1.TimeSheetReports.resources
+D:\Dummy\Salon_Git\WindowsApp1\WindowsApp1\obj\Debug\WindowsApp1.Close_Day.resources

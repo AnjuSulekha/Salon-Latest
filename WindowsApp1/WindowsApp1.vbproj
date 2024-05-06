@@ -125,6 +125,12 @@
     <Compile Include="Choose_Product.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Close_Day.Designer.vb">
+      <DependentUpon>Close_Day.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Close_Day.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Close_Workfrm.Designer.vb">
       <DependentUpon>Close_Workfrm.vb</DependentUpon>
     </Compile>
@@ -203,6 +209,12 @@
     <Compile Include="Product_Main.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="TimeSheetReports.Designer.vb">
+      <DependentUpon>TimeSheetReports.vb</DependentUpon>
+    </Compile>
+    <Compile Include="TimeSheetReports.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Working.Designer.vb">
       <DependentUpon>Working.vb</DependentUpon>
     </Compile>
@@ -231,6 +243,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Choose_Product.resx">
       <DependentUpon>Choose_Product.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Close_Day.resx">
+      <DependentUpon>Close_Day.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Close_Workfrm.resx">
       <DependentUpon>Close_Workfrm.vb</DependentUpon>
@@ -267,6 +282,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Product_Main.resx">
       <DependentUpon>Product_Main.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TimeSheetReports.resx">
+      <DependentUpon>TimeSheetReports.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Working.resx">
       <DependentUpon>Working.vb</DependentUpon>
@@ -311,6 +329,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\trash.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\expenses %281%291.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

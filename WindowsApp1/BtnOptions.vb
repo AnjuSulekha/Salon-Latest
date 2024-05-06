@@ -16,11 +16,11 @@ Public Class BtnOptions
         Btn_Start.ForeColor = Color.White
         Btn_Stop.ForeColor = Color.White
         Btn_Cancel.ForeColor = Color.White
-        'Chair_Opt.Visible = False
-        'Start_Time.Visible = False
-        'Stop_Time.Visible = False
+        Chair_Opt.Visible = False
+        Start_Time.Visible = False
+        Stop_Time.Visible = False
         'Staffid.Text = BtnDataGrid_Frm.Label2
-
+        Staffid.Visible = False
     End Sub
     Private Sub SetRoundedButton(ByVal button As Button, ByVal cornerRadius As Integer)
         button.FlatAppearance.BorderSize = 0
@@ -112,9 +112,10 @@ Public Class BtnOptions
                 cmd.CommandText = "Update  StaffMaster set Work_Status=0 where Chair_ID =" & Chair_Opt.Text & ""
                 cmd.ExecuteNonQuery()
                 con.Close()
-                Thread.Sleep(2000)
+                Thread.Sleep(1000)
                 'Chairs_working.RefreshChairsStatus()
                 Me.Close()
+
 
                 Close_Workfrm.MdiParent = Form1
                 Close_Workfrm.Show()

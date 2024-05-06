@@ -32,6 +32,11 @@ WindowsApp1
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
 </member>
+<member name="P:WindowsApp1.My.Resources.Resources.expenses__1_">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
 <member name="P:WindowsApp1.My.Resources.Resources.icons8_password_48">
 <summary>
   Looks up a localized resource of type System.Drawing.Bitmap.

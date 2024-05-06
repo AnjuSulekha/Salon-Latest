@@ -1,11 +1,17 @@
 ﻿Imports System.Data.OleDb
+Imports System.Data.SqlClient
 Imports System.Globalization
 Imports System.IO
 Imports System.Net
+Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports System.Security.Cryptography
+Imports System.Security.Policy
+Imports System.Threading
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports iTextSharp.text
 Imports iTextSharp.text.pdf
+Imports Org.BouncyCastle.Math.EC
 Public Class Close_Workfrm
     Dim con As New OleDbConnection
     Dim cmd As New OleDbCommand
@@ -42,12 +48,7 @@ Public Class Close_Workfrm
     'End Sub
     Private Sub Close_Workfrm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         WorkCalculation()
-
-        'DT_CLOSE.Columns.Add("Column1", "ItemName")
-        'DT_CLOSE.Columns.Add("Column2", "Rate")
-        'DT_CLOSE.Columns.Add("Column3", "Quantity")
-        'DT_CLOSE.Columns.Add("Column4", "Amount")
-        'DT_CLOSE.Columns.Add("Column5", "Delete")
+        LoadBill()
         DT_CLOSE.Columns("Column1").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
         DT_CLOSE.Columns("Column2").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
         DT_CLOSE.Columns("Column3").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
@@ -67,7 +68,7 @@ Public Class Close_Workfrm
                 Dim staffid As String = reader("StaffID").ToString()
                 lbl_Staffid.Text = staffid
                 Dim staffName As String = reader("StaffName").ToString()
-                lbl_StaffName.Text = staffName
+                Txt_StaffName.Text = staffName
                 Dim imagePath As String = reader("Img").ToString() ' Corrected here
 
                 ' Display the image in PictureBox
@@ -175,8 +176,9 @@ Public Class Close_Workfrm
         Dim rate2 As Integer = Val(Txt_Product.Text)
         Dim rate4 As Integer = Val(Txt_Tax.Text)
         Dim ans As Integer = qty2 + rate2
+        Dim dis As Integer = Val(Txt_Discount.Text)
         Txt_Bill.Text = Format(ans, "0.00")
-        Dim ans1 As Integer = ans + rate4
+        Dim ans1 As Integer = ans - dis '+ rate4
         Txt_GrandTotal.Text = Format(ans1, "0.00")
         Dim bank As Integer = Val(Txt_Bank.Text)
         Dim ans2 As Integer = ans1 - bank
@@ -216,6 +218,8 @@ Public Class Close_Workfrm
         Try
             Using con As New OleDbConnection(ConString)
                 con.Open()
+                Dim BILL_ID As Integer
+                Dim BillNo As Integer
                 Dim entryDate As DateTime = DateTime.Today
                 '   Dim amount As Decimal = Decimal.Parse(Txt_GrandTotal.Text)
                 ' lbl_Date.Text = entryDate.ToString("yyyy-MM-dd")
@@ -227,21 +231,70 @@ Public Class Close_Workfrm
                 Dim itemName As String ' Assuming ItemName is in the first column (index 0)
                 Dim rate As String  ' Assuming Rate is in the second column (index 1)
                 Dim quantity As String
+                Dim Item_Amount As String
                 For Each row As DataGridViewRow In DT_CLOSE.Rows
                     itemName = row.Cells(0).Value.ToString() ' Assuming ItemName is in the first column (index 0)
                     rate = row.Cells(1).Value.ToString() ' Assuming Rate is in the second column (index 1)
                     quantity = row.Cells(2).Value.ToString() ' Assuming Quantity is in the third column (index 2)
+                    Item_Amount = row.Cells(3).Value.ToString() ' Assuming Quantity is in the third column (index 2)
+
                 Next
-                Dim cmdText As String = "INSERT INTO Bill_Details (EntryDate,ItemName, Rate, Qty,Amount) VALUES (@EntryDate,@ItemName, @Rate, @Qty,@Amount)"
+
+                Dim cmdText As String = "INSERT INTO Bill_inf (BillNo, StaffID, EntryDate,EntryTime , Amount, Cash,Card,Customer,Place,Mobile,EndTime,Staff_Name) 
+                VALUES( @BillNo,@StaffID,@EntryDate,@EntryTime, @Amount, @Cash,@Card, @Customer, @Place,@Mobile,@EndTime,@Staff_Name)" ',, , , , ,,, , ,, , ,
                 Using cmd As New OleDbCommand(cmdText, con)
-                    cmd.Parameters.AddWithValue("@EntryDate", entryDate) 'EntryDate,@EntryDate,
-                    cmd.Parameters.AddWithValue("@ItemName", itemName)
-                    cmd.Parameters.AddWithValue("@Rate", rate)
-                    cmd.Parameters.AddWithValue("@Qty", quantity)
-                    cmd.Parameters.AddWithValue("@Amount", Txt_GrandTotal.Text) ', Amount,, @Amount
+                    cmd.Parameters.AddWithValue("@BillNo", Convert.ToInt32(Txt_billno.Text)) ' Convert if necessary
+                    cmd.Parameters.AddWithValue("@StaffID", lbl_Staffid.Text)
+                    cmd.Parameters.AddWithValue("@EntryDate", entryDate)
+                    cmd.Parameters.AddWithValue("@EntryTime", Txt_Start.Text)
+                    cmd.Parameters.AddWithValue("@Amount", Txt_Bill.Text)
+                    cmd.Parameters.AddWithValue("@Cash", Txt_Cash.Text)
+                    cmd.Parameters.AddWithValue("@Card", Txt_Bank.Text)
+                    cmd.Parameters.AddWithValue("@Customer", txt_Cname.Text)
+                    cmd.Parameters.AddWithValue("@Place", txt_Cplace.Text)
+                    cmd.Parameters.AddWithValue("@Mobile", txt_Cmobile.Text)
+                    cmd.Parameters.AddWithValue("@EndTime", Txt_End.Text)
+                    cmd.Parameters.AddWithValue("@Staff_Name", Txt_StaffName.Text)
                     cmd.ExecuteNonQuery()
                 End Using
+                con.Close()
+                If con.State = ConnectionState.Closed Then con.Open()
+                cmd = con.CreateCommand
+                cmd.CommandText = "select max(BID),max(BillNo) from Bill_inf"
+                dr = cmd.ExecuteReader
+                dr.Read()
 
+                If dr.HasRows = True Then
+                    If Not dr.IsDBNull(0) AndAlso Not dr.IsDBNull(1) Then
+                        ' If IsDBNull(dr.GetValue(0)) = False Then'
+                        BILL_ID = dr.GetInt32(0)
+                        BillNo = dr.GetInt32(1)
+
+                    Else
+                        BILL_ID = 1
+                        BillNo = 1
+                    End If
+                    Else
+                        dr.Close()
+                    BILL_ID = 1
+                    BillNo = 1
+                End If
+                dr.Close()
+                con.Close()
+                If con.State = ConnectionState.Closed Then con.Open()
+                cmd = con.CreateCommand
+                cmd.CommandText = "INSERT INTO Bill_Details (BID,BillNo,EntryDate,ItemName, Qty, Rate, Amount) 
+                                  VALUES(@BID,@BillNo, @EntryDate, @ItemName, @Qty, @Rate, @Amount)"
+                Using cmdDetails As New OleDbCommand(cmd.CommandText, con)
+                    cmdDetails.Parameters.AddWithValue("@BID", BILL_ID)
+                    cmdDetails.Parameters.AddWithValue("@BillNo", BillNo)
+                    cmdDetails.Parameters.AddWithValue("@EntryDate", entryDate)
+                    cmdDetails.Parameters.AddWithValue("@ItemName", itemName)
+                    cmdDetails.Parameters.AddWithValue("@Qty", quantity)
+                    cmdDetails.Parameters.AddWithValue("@Rate", rate)
+                    cmdDetails.Parameters.AddWithValue("@Amount", Item_Amount)
+                    cmdDetails.ExecuteNonQuery()
+                End Using
                 con.Close()
                 If con.State = ConnectionState.Closed Then con.Open()
                 cmd = con.CreateCommand()
@@ -255,36 +308,38 @@ Public Class Close_Workfrm
                 cmd.Parameters.AddWithValue("@ID", CloseWrk_ChairId.Text)
                 cmd.ExecuteNonQuery()
                 con.Close()
-                ' Generate PDF
-                Dim fileName As String = "Bill.pdf"
-                Dim filePath As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), fileName)
 
-                Using fs As New FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None)
-                    Using doc As New Document()
-                        Using writer As PdfWriter = PdfWriter.GetInstance(doc, fs)
-                            doc.Open()
 
-                            ' Add bill details to the PDF
-                            doc.Add(New Paragraph("Bill Details"))
-                            doc.Add(New Paragraph($"Entry Date: {entryDate.ToString("yyyy-MM-dd")}"))
-                            doc.Add(New Paragraph($"Service Charge: {Txt_Service.Text}"))
-                            doc.Add(New Paragraph($"Bill Amount: {Txt_Bill.Text}"))
-                            doc.Add(New Paragraph($"Start Time: {Txt_Start.Text}"))
-                            doc.Add(New Paragraph($"End Time: {Txt_End.Text}"))
+                '' Generate PDF
+                'Dim fileName As String = "Bill.pdf"
+                'Dim filePath As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), fileName)
 
-                            ' Add items from DataGridView to the PDF
-                            'doc.Add(New Paragraph("Items:"))
-                            'For Each row As DataGridViewRow In DT_CLOSE.Rows
-                            '    Dim itemName As String = row.Cells(0).Value.ToString()
-                            '    Dim rate As String = row.Cells(1).Value.ToString()
-                            '    Dim quantity As String = row.Cells(2).Value.ToString()
-                            '    Dim amount As String = row.Cells(3).Value.ToString()
-                            '    doc.Add(New Paragraph($"Item: {itemName}, Rate: {rate}, Quantity: {quantity}, Amount: {amount}"))
-                            'Next
-                            doc.Close()
-                        End Using
-                    End Using
-                End Using
+                'Using fs As New FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None)
+                '    Using doc As New Document()
+                '        Using writer As PdfWriter = PdfWriter.GetInstance(doc, fs)
+                '            doc.Open()
+
+                '            ' Add bill details to the PDF
+                '            doc.Add(New Paragraph("Bill Details"))
+                '            doc.Add(New Paragraph($"Entry Date: {entryDate.ToString("yyyy-MM-dd")}"))
+                '            doc.Add(New Paragraph($"Service Charge: {Txt_Service.Text}"))
+                '            doc.Add(New Paragraph($"Bill Amount: {Txt_Bill.Text}"))
+                '            doc.Add(New Paragraph($"Start Time: {Txt_Start.Text}"))
+                '            doc.Add(New Paragraph($"End Time: {Txt_End.Text}"))
+
+                '            ' Add items from DataGridView to the PDF
+                '            'doc.Add(New Paragraph("Items:"))
+                '            'For Each row As DataGridViewRow In DT_CLOSE.Rows
+                '            '    Dim itemName As String = row.Cells(0).Value.ToString()
+                '            '    Dim rate As String = row.Cells(1).Value.ToString()
+                '            '    Dim quantity As String = row.Cells(2).Value.ToString()
+                '            '    Dim amount As String = row.Cells(3).Value.ToString()
+                '            '    doc.Add(New Paragraph($"Item: {itemName}, Rate: {rate}, Quantity: {quantity}, Amount: {amount}"))
+                '            'Next
+                '            doc.Close()
+                '        End Using
+                '    End Using
+                'End Using
 
                 clear()
                 Me.Close()
@@ -390,13 +445,113 @@ Public Class Close_Workfrm
         Txt_Product.Text = ""
         Txt_Tax.Text = ""
         Txt_Discount.Text = ""
-        TextBox10.Text = ""
-        TextBox9.Text = ""
-        TextBox11.Text = ""
+        txt_Cplace.Text = ""
+        txt_Cname.Text = ""
+        txt_Cmobile.Text = ""
         PictureBox1.Image = Nothing
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
 
     End Sub
+
+    Private Sub Txt_Discount_TextChanged(sender As Object, e As EventArgs) Handles Txt_Discount.TextChanged
+        FunCalculateAmount()
+    End Sub
+
+    Private Sub lbl_WDuration_Click(sender As Object, e As EventArgs) Handles lbl_WDuration.Click
+
+    End Sub
+    Private Sub LoadBill()
+        Try
+            con.ConnectionString = ConString
+            cmd = con.CreateCommand
+            If con.State = ConnectionState.Closed Then con.Open()
+            cmd.CommandText = "Select Max(BillNo) from Bill_inf"
+            dr = cmd.ExecuteReader
+            dr.Read()
+            If dr.HasRows = True Then
+                If IsDBNull(dr.GetValue(0)) = False Then
+                    Me.Txt_billno.Text = Val(dr.GetValue(0)) + 1
+                Else
+                    Me.Txt_billno.Text = 1
+                End If
+            Else
+                dr.Close()
+                Me.Txt_billno.Text = 1
+            End If
+            dr.Close()
+        Catch ex As Exception
+        Finally
+            con.Close()
+        End Try
+    End Sub
+
+    Private Sub Txt_Service_KeyDown(sender As Object, e As KeyEventArgs) Handles Txt_Service.KeyDown
+        Call Tabmovement(e.KeyCode)
+    End Sub
+
+    Private Sub Txt_Product_KeyDown(sender As Object, e As KeyEventArgs) Handles Txt_Product.KeyDown
+        Call Tabmovement(e.KeyCode)
+    End Sub
+
+    Private Sub Txt_Tax_KeyDown(sender As Object, e As KeyEventArgs) Handles Txt_Tax.KeyDown
+        Call Tabmovement(e.KeyCode)
+
+    End Sub
+
+    Private Sub Txt_Discount_KeyDown(sender As Object, e As KeyEventArgs) Handles Txt_Discount.KeyDown
+        Call Tabmovement(e.KeyCode)
+    End Sub
+
+    Private Sub Txt_Cash_KeyDown(sender As Object, e As KeyEventArgs) Handles Txt_Cash.KeyDown
+        Call Tabmovement(e.KeyCode)
+    End Sub
+
+    Private Sub Txt_Bank_KeyDown(sender As Object, e As KeyEventArgs) Handles Txt_Bank.KeyDown
+        Call Tabmovement(e.KeyCode)
+    End Sub
+
+    Private Sub TextBox9_TextChanged(sender As Object, e As EventArgs) Handles txt_Cname.TextChanged
+
+    End Sub
+
+    Private Sub TextBox9_KeyDown(sender As Object, e As KeyEventArgs) Handles txt_Cname.KeyDown
+        Call Tabmovement(e.KeyCode)
+    End Sub
+
+    Private Sub TextBox10_TextChanged(sender As Object, e As EventArgs) Handles txt_Cplace.TextChanged
+
+    End Sub
+
+    Private Sub TextBox10_KeyDown(sender As Object, e As KeyEventArgs) Handles txt_Cplace.KeyDown
+        Call Tabmovement(e.KeyCode)
+    End Sub
+
+    Private Sub TextBox11_TextChanged(sender As Object, e As EventArgs) Handles txt_Cmobile.TextChanged
+
+    End Sub
+
+    Private Sub TextBox11_KeyDown(sender As Object, e As KeyEventArgs) Handles txt_Cmobile.KeyDown
+        Call Tabmovement(e.KeyCode)
+
+    End Sub
 End Class
+'Dim cmdText As String = "INSERT INTO Bill_inf (BillNo, StaffID, entryDate, EntryTime, Amount, Cash, Card, Customer, Mobile, Place) 
+'  VALUES(@BillNo, @StaffID, @EntryDate, @EntryTime, @Amount, @Cash, @Card, @Customer, @Mobile, @Place)"
+'Using cmd As New OleDbCommand(cmdText, con)
+'    cmd.Parameters.Add("@BillNo", OleDbType.Integer).Value = Convert.ToInt32(Txt_billno.Text)
+'    ' cmd.Parameters.AddWithValue("@BillNo", Txt_billno.Text) 'EntryDate,@EntryDate,
+'    cmd.Parameters.AddWithValue("@StaffID", lbl_Staffid.Text) 'EntryDate,@EntryDate,
+'    cmd.Parameters.AddWithValue("@EntryDate", entryDate)
+'    cmd.Parameters.AddWithValue("@EntryTime", Txt_Start.Text)
+'    cmd.Parameters.AddWithValue("@Amount", Txt_Bill.Text)
+'    cmd.Parameters.AddWithValue("@Cash", Txt_Cash.Text)
+'    cmd.Parameters.AddWithValue("@Card", Txt_Bank.Text)
+'    'cmd.Parameters.AddWithValue("@BankName", Txt_GrandTotal.Text) ,@BankName',BankName, Amount,, @Amount
+'    cmd.Parameters.AddWithValue("@Customer", txt_Cname.Text)
+'    cmd.Parameters.AddWithValue("@Mobile", txt_Cplace.Text)
+'    cmd.Parameters.AddWithValue("@Place", txt_Cmobile.Text)
+'    cmd.ExecuteNonQuery()
+'End Using
+'con.Close()

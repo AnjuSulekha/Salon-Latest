@@ -9,7 +9,8 @@ Public Class BtnDataGrid_Frm
     Dim dr As OleDbDataReader
     Private Sub BtnDataGrid_Frm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         DataGridAdd("")
-        Id.Visible = True
+        Id.Visible = False
+        Label2.Visible = False
 
     End Sub
     Private Sub DataGridAdd(SearchString As String)
