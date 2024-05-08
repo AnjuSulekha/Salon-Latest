@@ -12,16 +12,27 @@ Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports iTextSharp.text
 Imports iTextSharp.text.pdf
 Imports Org.BouncyCastle.Math.EC
+
 Public Class Close_Workfrm
     Dim con As New OleDbConnection
     Dim cmd As New OleDbCommand
     Dim dr As OleDbDataReader
+    Dim PVColSlno As Integer, PVColItemName As Integer, PVColQuantity As Integer, PVColAmount As Integer
     Private Sub Txt_Service_TextChanged(sender As Object, e As EventArgs) Handles Txt_Service.TextChanged
         FunCalculateAmount()
     End Sub
     Private Sub Label8_Click(sender As Object, e As EventArgs)
 
     End Sub
+    Private Sub PVCols()
+        'PVColSlno = 0
+        PVColItemName = 0
+        PVColQuantity = 1
+        PVColAmount = 2
+
+    End Sub
+
+
     'Private Sub Close_Workfrm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
     '    WorkCalculation()
     '    lbl_Chairid.Text = BtnOptions.Chair_Opt.Text
@@ -49,16 +60,33 @@ Public Class Close_Workfrm
     Private Sub Close_Workfrm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         WorkCalculation()
         LoadBill()
-        DT_CLOSE.Columns("Column1").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
-        DT_CLOSE.Columns("Column2").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
-        DT_CLOSE.Columns("Column3").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
-        DT_CLOSE.Columns("Column4").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
+        'DT_CLOSE.Columns("Column1").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+        'DT_CLOSE.Columns("Column2").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
+        'DT_CLOSE.Columns("Column3").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
+        'DT_CLOSE.Columns("Column4").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
         lbl_Staffid.Visible = False
         lbl_Chairid.Visible = False
         CloseWrk_ChairId.Visible = False
+
+        'Call PVCols()
         Try
+            Me.Txt_Slno.Text = 1
+            ' Call PlaceGrid(0)
+            DT_CLOSE.Rows.Add(10)
             con.ConnectionString = ConString
             cmd = con.CreateCommand
+            If con.State = ConnectionState.Closed Then con.Open()
+            cmd.CommandText = " SELECT ItemName,Rate FROM Item_Master"
+            dr = cmd.ExecuteReader()
+
+            Dim TAKEOLD As String = Me.cmb_Itemname.Text
+            Me.cmb_Itemname.Items.Clear()
+            While dr.Read()
+                Me.cmb_Itemname.Items.Add(dr.GetString(0))
+            End While
+            dr.Close()
+            Me.cmb_Itemname.Text = TAKEOLD
+            'If con.State = ConnectionState.Closed Then con.Open()
             If con.State = ConnectionState.Closed Then con.Open()
             cmd.CommandText = "SELECT StaffID,StaffName, Img FROM StaffMaster WHERE Chair_ID = ?"
             cmd.Parameters.AddWithValue("@Chair_ID", CloseWrk_ChairId.Text)
@@ -86,6 +114,58 @@ Public Class Close_Workfrm
         End Try
 
     End Sub
+    'Private Sub PlaceGrid(ByVal rowindex As Integer)
+    '    Dim RowHeight1 As Integer = DT_CLOSE.Rows(rowindex).Height
+    '    Dim CellRectangle1 As System.Drawing.Rectangle = DT_CLOSE.GetCellDisplayRectangle(0, rowindex, False)
+    '    '  Dim CellRectangle1 As Rectangle = DT_CLOSE.GetCellDisplayRectangle(0, rowindex, False) 'GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, False)  '
+    '    'GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, False)  '
+    '    CellRectangle1.X += DT_CLOSE.Left
+    '    CellRectangle1.Y += DT_CLOSE.Top
+    '    Txt_Slno.Width = CellRectangle1.Width - 5
+    '    Txt_Slno.Left = CellRectangle1.X
+    '    Txt_Slno.Top = CellRectangle1.Y
+    '    ' MsgBox(CellRectangle1.X)
+
+    '    CellRectangle1 = DT_CLOSE.GetCellDisplayRectangle(1, rowindex, False)
+    '    CellRectangle1.X += DT_CLOSE.Left - 4
+    '    CellRectangle1.Y += DT_CLOSE.Top
+    '    cmb_Itemname.Width = CellRectangle1.Width - 5
+    '    cmb_Itemname.Left = CellRectangle1.X
+    '    cmb_Itemname.Top = CellRectangle1.Y
+    '    If CellRectangle1.Width <= 5 Then
+    '        cmb_Itemname.TabStop = False
+    '    End If
+    '    ' MsgBox(CellRectangle1.X)
+    '    'CellRectangle1 = DT_CLOSE.GetCellDisplayRectangle(2, rowindex, False)
+    '    'CellRectangle1.X += DT_CLOSE.Left - 8
+    '    'CellRectangle1.Y += DT_CLOSE.Top
+    '    'Txt_Rate.Width = CellRectangle1.Width - 3
+
+    '    'Txt_Rate.Left = CellRectangle1.X
+    '    'Txt_Rate.Top = CellRectangle1.Y
+    '    'If CellRectangle1.Width <= 5 Then
+    '    '    Txt_Rate.TabStop = False
+    '    'End If
+    '    CellRectangle1 = DT_CLOSE.GetCellDisplayRectangle(2, rowindex, False)
+    '    CellRectangle1.X += DT_CLOSE.Left - 8
+    '    CellRectangle1.Y += DT_CLOSE.Top
+    '    Txt_QTY.Width = CellRectangle1.Width - 2
+    '    Txt_QTY.Left = CellRectangle1.X
+    '    Txt_QTY.Top = CellRectangle1.Y
+    '    If CellRectangle1.Width <= 5 Then
+    '        Txt_QTY.TabStop = False
+    '    End If
+    '    CellRectangle1 = DT_CLOSE.GetCellDisplayRectangle(3, rowindex, False)
+    '    CellRectangle1.X += DT_CLOSE.Left - 9
+    '    CellRectangle1.Y += DT_CLOSE.Top
+    '    Txt_Amound.Width = CellRectangle1.Width - 5
+    '    Txt_Amound.Left = CellRectangle1.X
+    '    Txt_Amound.Top = CellRectangle1.Y
+    '    If CellRectangle1.Width <= 5 Then
+    '        Txt_Amound.TabStop = False
+    '    End If
+    'End Sub
+
 
     Public Function WorkCalculation() As String
         Dim workDurationFormatted As String = ""
@@ -536,6 +616,466 @@ Public Class Close_Workfrm
         Call Tabmovement(e.KeyCode)
 
     End Sub
+
+    Private Sub Txt_billno_TextChanged(sender As Object, e As EventArgs) Handles Txt_billno.TextChanged
+
+    End Sub
+
+    Private Sub Txt_billno_KeyDown(sender As Object, e As KeyEventArgs) Handles Txt_billno.KeyDown
+        Call Tabmovement(e.KeyCode)
+    End Sub
+
+    Private Sub Txt_StaffName_TextChanged(sender As Object, e As EventArgs) Handles Txt_StaffName.TextChanged
+
+    End Sub
+
+    Private Sub Txt_StaffName_KeyDown(sender As Object, e As KeyEventArgs) Handles Txt_StaffName.KeyDown
+        Call Tabmovement(e.KeyCode)
+    End Sub
+
+    Private Sub Txt_Start_TextChanged(sender As Object, e As EventArgs) Handles Txt_Start.TextChanged
+
+    End Sub
+
+    Private Sub Txt_Start_KeyDown(sender As Object, e As KeyEventArgs) Handles Txt_Start.KeyDown
+        Call Tabmovement(e.KeyCode)
+    End Sub
+
+    Private Sub Txt_End_TextChanged(sender As Object, e As EventArgs) Handles Txt_End.TextChanged
+
+    End Sub
+
+    Private Sub Txt_End_KeyDown(sender As Object, e As KeyEventArgs) Handles Txt_End.KeyDown
+        Call Tabmovement(e.KeyCode)
+    End Sub
+
+    'Private Sub cmb_Itemname_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Itemname.SelectedIndexChanged
+
+    'End Sub
+
+    Private Sub cmb_Itemname_KeyDown(sender As Object, e As KeyEventArgs) Handles cmb_Itemname.KeyDown
+        Call Tabmovement(e.KeyCode)
+    End Sub
+
+    Private Sub Txt_QTY_TextChanged(sender As Object, e As EventArgs) Handles Txt_QTY.TextChanged
+
+    End Sub
+
+    Private Sub Txt_QTY_KeyDown(sender As Object, e As KeyEventArgs) Handles Txt_QTY.KeyDown
+        Call Tabmovement(e.KeyCode)
+    End Sub
+
+    Private Sub Txt_Amound_TextChanged(sender As Object, e As EventArgs) Handles Txt_Amound.TextChanged
+
+    End Sub
+    Private Sub funclear()
+        cmb_Itemname.Text = ""
+        Txt_QTY.Text = ""
+        Txt_Amound.Text = ""
+    End Sub
+    'Private Sub Txt_Amound_KeyDown(sender As Object, e As KeyEventArgs) Handles Txt_Amound.KeyDown
+    '    If e.KeyCode = 13 Then
+    '        Try
+    '            If DT_CLOSE.Rows.Count <= (Me.Txt_Slno.Text) Then
+    '                DT_CLOSE.Rows.Add()
+    '            End If
+    '            DT_CLOSE.Rows(Val(Txt_Slno.Text) - 1).Cells(PVColSlno).Value = Txt_Slno.Text
+    '            DT_CLOSE.Rows(Val(cmb_Itemname.Text) - 1).Cells(PVColItemName).Value = cmb_Itemname.Text
+    '            DT_CLOSE.Rows(Val(Txt_QTY.Text) - 1).Cells(PVColQuantity).Value = Txt_QTY.Text
+    '            DT_CLOSE.Rows(Val(Txt_Amound.Text) - 1).Cells(PVColAmount).Value = Txt_Amound.Text
+
+    '            funclear()
+    '            Txt_Slno.Text = Txt_Slno.Text + 1
+    '            If Val(DT_CLOSE.Rows.Count) < Val(Me.Txt_Slno.Text) Then
+    '                DT_CLOSE.Rows.Add()
+    '            End If
+    '            If Trim(DT_CLOSE.Rows(Val(Txt_Slno.Text) - 1).Cells(0).Value) <> "" Then
+    '                Me.Txt_Slno.Text = DT_CLOSE.Rows(Val(Txt_Slno.Text) - 1).Cells(PVColSlno).Value
+    '                Me.cmb_Itemname.Text = DT_CLOSE.Rows(Val(Txt_Slno.Text) - 1).Cells(PVColItemName).Value
+    '                Me.Txt_QTY.Text = DT_CLOSE.Rows(Val(Txt_Slno.Text) - 1).Cells(PVColQuantity).Value
+    '                Me.Txt_Amound.Text = DT_CLOSE.Rows(Val(Txt_Slno.Text) - 1).Cells(PVColAmount).Value
+    '                'Me.txt_Disc.Text = DT_CLOSE.Rows(Val(Txt_Slno.Text) - 1).Cells(PVColDisc).Value
+    '                'Me.txt_Total.Text = DT_CLOSE.Rows(Val(Txt_Slno.Text) - 1).Cells(PVColTotal).Value
+    '                'Me.txt_Ref.Text = DT_CLOSE.Rows(Val(Txt_Slno.Text) - 1).Cells(PVColRef).Value
+    '                'Me.txt_Note.Text = DT_CLOSE.Rows(Val(Txt_Slno.Text) - 1).Cells(PVColNarration).Value
+    '                Call PlaceGrid(Val(Me.Txt_Slno.Text) - 1)
+    '                Me.cmb_Itemname.Focus()
+    '            End If
+    '            If Val(Me.Txt_Slno.Text) > 10 Then
+    '                DT_CLOSE.FirstDisplayedScrollingRowIndex = Val(Me.Txt_Slno.Text) - 10
+    '            End If
+    '            Call PlaceGrid(Val(Txt_Slno.Text) - 1)
+    '            'Me.txt_Code.Focus()
+
+    '        Catch ex As Exception
+    '            MsgBox(ex.Message)
+    '        End Try
+    '    End If
+    'End Sub
+    Private Sub Txt_Amound_KeyDown(sender As Object, e As KeyEventArgs) Handles Txt_Amound.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            Try
+                Dim rowIndex As Integer = Val(Txt_Slno.Text) - 1
+                ' Check if the row index is valid
+                If rowIndex >= 0 AndAlso rowIndex < DT_CLOSE.Rows.Count Then
+                    ' Update the corresponding DataGridView cell with textbox and combobox values
+                    DT_CLOSE.Rows(rowIndex).Cells(PVColSlno).Value = Txt_Slno.Text
+                    DT_CLOSE.Rows(rowIndex).Cells(PVColItemName).Value = cmb_Itemname.Text
+                    DT_CLOSE.Rows(rowIndex).Cells(PVColQuantity).Value = Txt_QTY.Text
+                    DT_CLOSE.Rows(rowIndex).Cells(PVColAmount).Value = Txt_Amound.Text
+
+                    ' Increment Slno and clear input fields
+                    Txt_Slno.Text = (Integer.Parse(Txt_Slno.Text) + 1).ToString()
+                    funclear()
+
+                    ' Scroll to the newly added row if necessary
+                    If rowIndex > 10 Then
+                        DT_CLOSE.FirstDisplayedScrollingRowIndex = rowIndex - 10
+                    End If
+
+                    ' Update the DataGridView
+                    ' Call PlaceGrid(rowIndex)
+                    'UpdateDT_CLOSEDataGridView()
+                End If
+            Catch ex As Exception
+                MsgBox(ex.Message)
+            End Try
+        End If
+    End Sub
+    Private Sub cmb_Itemname_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Itemname.SelectedIndexChanged
+        ' Get the selected item from the ComboBox
+        Dim selectedItem As String = cmb_Itemname.SelectedItem.ToString()
+
+        ' Determine the DataGridView cell where you want to populate the data
+        ' For example, if you want to populate the next cell in the same row as the ComboBox
+        Dim columnIndex As Integer = 1 ' Assuming the next cell is in the second column (index 1)
+        ' Dim rowIndex As Integer = DT_CLOSE.CurrentRow.Index ' Assuming you're using the current row
+        Dim rowIndex As Integer = -1
+        If DT_CLOSE.CurrentRow IsNot Nothing Then
+            rowIndex = DT_CLOSE.CurrentRow.Index
+        End If
+
+        ' Set the value of the DataGridView cell to the selected item's data
+        DT_CLOSE.Rows(rowIndex).Cells(columnIndex).Value = selectedItem
+
+        ' Optionally, you can fetch additional data related to the selected item and populate other cells
+        ' For example, retrieve the amount for the selected item and populate another cell
+        Dim amount As Decimal = GetAmountForItem(selectedItem)
+        Dim amountColumnIndex As Integer = 2 ' Assuming the amount column index
+        DT_CLOSE.Rows(rowIndex).Cells(amountColumnIndex).Value = amount
+    End Sub
+    Private Function GetAmountForItem(itemName As String) As Decimal
+        Dim amount As Decimal = 0
+
+        Try
+            ' Assuming you have a database connection named 'con' and a command named 'cmd'
+            If con.State = ConnectionState.Closed Then
+                con.Open()
+            End If
+
+            cmd.CommandText = "SELECT Rate FROM Item_Master WHERE ItemName = @ItemName"
+            cmd.Parameters.AddWithValue("@ItemName", cmb_Itemname.Text)
+            Dim result = cmd.ExecuteScalar()
+
+            If result IsNot Nothing AndAlso Not IsDBNull(result) Then
+                amount = Convert.ToDecimal(result)
+            End If
+        Catch ex As Exception
+            ' Handle any exceptions here (e.g., logging or displaying an error message)
+            MessageBox.Show("Error retrieving amount: " & ex.Message)
+        Finally
+            con.Close()
+        End Try
+
+        Return amount
+    End Function
+
+    'Private Sub cmb_Itemname_TextChanged(sender As Object, e As EventArgs) Handles cmb_Itemname.TextChanged
+    '    Try
+    '        If con.State = ConnectionState.Closed Then con.Open()
+
+    '        Dim cmdText As String = "SELECT Rate FROM Item_Master WHERE ItemName = @ItemName"
+
+    '        Using cmd As New OleDbCommand(cmdText, con)
+    '            cmd.Parameters.AddWithValue("@ItemName", cmb_Itemname.Text)
+
+    '            Dim rate As Object = cmd.ExecuteScalar()
+    '            If rowIndex >= 0 Then
+    '                DT_CLOSE.Rows(rowIndex).Cells("ItemNameColumn").Value = selectedItem
+    '                DT_CLOSE.Rows(rowIndex).Cells("AmountColumn").Value = amount
+    '            End If
+    '            'If rate IsNot Nothing AndAlso Not DBNull.Value.Equals(rate) Then
+    '            '    Me.Txt_Amound.Text = rate.ToString()
+    '            'Else
+    '            '    ' Handle case when rate is not found for the selected item
+    '            '    Me.Txt_Amound.Text = "" ' Clear the text box or provide a default value
+    '            'End If
+    '        End Using
+
+    '    Catch ex As Exception
+    '        ' Handle exception, e.g., display error message
+    '        MessageBox.Show("Error: " & ex.Message)
+    '    Finally
+    '        con.Close()
+    '    End Try
+    'End Sub
+    'Private Sub cmb_Itemname_TextChanged(sender As Object, e As EventArgs) Handles cmb_Itemname.TextChanged
+    '    Try
+    '        If con.State = ConnectionState.Closed Then con.Open()
+
+    '        Dim cmdText As String = "SELECT Rate FROM Item_Master WHERE ItemName = @ItemName"
+
+    '        Using cmd As New OleDbCommand(cmdText, con)
+    '            cmd.Parameters.AddWithValue("@ItemName", cmb_Itemname.Text)
+
+    '            Dim rate As Object = cmd.ExecuteScalar()
+
+    '            Dim rowIndex As Integer = -1
+    '            If DT_CLOSE.CurrentRow IsNot Nothing Then
+    '                rowIndex = DT_CLOSE.CurrentRow.Index
+    '            End If
+
+    '            If rate IsNot Nothing AndAlso Not DBNull.Value.Equals(rate) AndAlso rowIndex >= 0 Then
+    '                DT_CLOSE.Rows(rowIndex).Cells("ItemName").Value = cmb_Itemname.Text
+    '                DT_CLOSE.Rows(rowIndex).Cells("Amount").Value = rate
+    '            End If
+    '        End Using
+
+    '    Catch ex As Exception
+    '        ' Handle exception, e.g., display error message
+    '        MessageBox.Show("Error: " & ex.Message)
+    '    Finally
+    '        con.Close()
+    '    End Try
+    'End Sub
+    'Private Sub cmb_Itemname_TextChanged(sender As Object, e As EventArgs) Handles cmb_Itemname.TextChanged
+    '    Try
+    '        If con.State = ConnectionState.Closed Then con.Open()
+
+    '        Dim cmdText As String = "SELECT Rate FROM Item_Master WHERE ItemName = @ItemName"
+
+    '        Using cmd As New OleDbCommand(cmdText, con)
+    '            cmd.Parameters.AddWithValue("@ItemName", cmb_Itemname.Text)
+
+    '            Dim rate As Object = cmd.ExecuteScalar()
+
+    '            ' Check if there are any rows in the DataGridView
+    '            If DT_CLOSE.Rows.Count > 0 Then
+    '                Dim rowIndex As Integer = DT_CLOSE.CurrentRow.Index
+    '                Dim columnName1 As String = "ItemName" ' Replace with the actual column name
+    '                Dim columnName2 As String = "ItemName" ' Replace with the actual column name
+
+    '                ' Check if the rowIndex is within the valid range
+    '                If rowIndex >= 0 AndAlso rowIndex < DT_CLOSE.Rows.Count Then
+    '                    ' Check if the column exists in the DataGridView
+    '                    If DT_CLOSE.Columns.Contains(columnName1) Then
+    '                        ' Update the DataGridView cell value
+    '                        DT_CLOSE.Rows(rowIndex).Cells(columnName).Value = cmb_Itemname.Text
+    '                        'Else
+    '                        '    MessageBox.Show($"Column '{columnName}' not found in the DataGridView.")
+    '                    End If
+    '                End If
+    '            End If
+    '        End Using
+
+    '    Catch ex As Exception
+    '        ' Handle exception, e.g., display error message
+    '        MessageBox.Show("Error: " & ex.Message)
+    '    Finally
+    '        con.Close()
+    '    End Try
+    'End Sub
+    'jjj
+    'Private Sub cmb_Itemname_TextChanged(sender As Object, e As EventArgs) Handles cmb_Itemname.TextChanged
+    '    Try
+    '        If con.State = ConnectionState.Closed Then con.Open()
+
+    '        Dim cmdText As String = "SELECT Rate FROM Item_Master WHERE ItemName = @ItemName"
+
+    '        Using cmd As New OleDbCommand(cmdText, con)
+    '            cmd.Parameters.AddWithValue("@ItemName", cmb_Itemname.Text)
+
+    '            Dim rate As Object = cmd.ExecuteScalar()
+    '            'MsgBox(rate)
+
+    '            ' Check if there are any rows in the DataGridView
+    '            If DT_CLOSE.Rows.Count > 0 Then
+    '                Dim rowIndex As Integer = DT_CLOSE.CurrentRow.Index
+
+    '                DT_CLOSE.Rows(rowIndex).Cells(PVColItemName).Value = cmb_Itemname.Text
+    '                DT_CLOSE.Rows(rowIndex).Cells(PVColAmount).Value = rate
+
+    '                ' Check if the rowIndex is within the valid range
+    '                If rowIndex >= 0 AndAlso rowIndex < DT_CLOSE.Rows.Count Then
+    '                    ' Check if the columns exist in the DataGridView
+    '                    'If DT_CLOSE.Columns.Contains(itemNameColumn) Then
+    '                    ' Update the DataGridView cell values
+    '                    'DT_CLOSE.Rows(rowIndex).Cells(itemNameColumn).Value = cmb_Itemname.Text
+    '                    '    DT_CLOSE.Rows(rowIndex).Cells(amountColumn).Value = rate.ToString()
+    '                    '    MsgBox(rate)
+    '                    'Else
+    '                    '    MessageBox.Show($"Column not found in the DataGridView.")
+    '                    'End If
+    '                End If
+    '            End If
+    '        End Using
+
+    '    Catch ex As Exception
+    '        ' Handle exception, e.g., display error message
+    '        MessageBox.Show("Error: " & ex.Message)
+    '    Finally
+    '        con.Close()
+    '    End Try
+    'End Sub
+
+    'Private Sub cmb_Itemname_TextChanged(sender As Object, e As EventArgs) Handles cmb_Itemname.TextChanged
+    '    Try
+    '        If con.State = ConnectionState.Closed Then con.Open()
+
+    '        Dim cmdText As String = "SELECT Rate FROM Item_Master WHERE ItemName = @ItemName"
+
+    '        Using cmd As New OleDbCommand(cmdText, con)
+    '            cmd.Parameters.AddWithValue("@ItemName", cmb_Itemname.Text)
+
+    '            Dim rate As Object = cmd.ExecuteScalar()
+
+    '            ' Check if there are any rows in the DataGridView
+    '            If DT_CLOSE.Rows.Count > 0 Then
+    '                Dim rowIndex As Integer = DT_CLOSE.CurrentRow.Index
+
+    '                ' Check if the rowIndex is within the valid range
+    '                If rowIndex >= 0 AndAlso rowIndex < DT_CLOSE.Rows.Count Then
+    '                    ' Set the values directly to the correct columns
+    '                    'DT_CLOSE.Rows(rowIndex).Cells(ItemName).Value = cmb_Itemname.Text
+    '                    'DT_CLOSE.Rows(rowIndex).Cells(Amount).Value = 
+    '                    Call PVCols()
+
+    '                    PVColItemName = cmb_Itemname.Text
+    '                    PVColAmount = rate
+    '                End If
+    '            End If
+    '        End Using
+
+    '    Catch ex As Exception
+    '        ' Handle exception, e.g., display error message
+    '        MessageBox.Show("Error: " & ex.Message)
+    '    Finally
+    '        con.Close()
+    '    End Try
+    'End Sub
+    Private Sub cmb_Itemname_TextChanged(sender As Object, e As EventArgs) Handles cmb_Itemname.TextChanged
+        Try
+            If con.State = ConnectionState.Closed Then con.Open()
+
+            Dim cmdText As String = "SELECT Rate FROM Item_Master WHERE ItemName = @ItemName"
+
+            Using cmd As New OleDbCommand(cmdText, con)
+                cmd.Parameters.AddWithValue("@ItemName", cmb_Itemname.Text)
+
+                Dim rate As Object = cmd.ExecuteScalar()
+
+                ' Check if there are any rows in the DataGridView
+                If DT_CLOSE.Rows.Count > 0 Then
+                    Dim rowIndex As Integer = DT_CLOSE.CurrentRow.Index
+
+                    ' Check if the rowIndex is within the valid range
+                    If rowIndex >= 0 AndAlso rowIndex < DT_CLOSE.Rows.Count Then
+                        ' Set the values directly to the correct columns
+                        Call PVCols()
+
+                        Dim PVColItemName As Integer = PVColItemName
+                        Dim PVColAmount As Integer = PVColAmount
+
+                        DT_CLOSE.Rows(rowIndex).Cells(PVColItemName).Value = cmb_Itemname.Text
+                        DT_CLOSE.Rows(rowIndex).Cells(PVColAmount).Value = rate
+                    End If
+                End If
+            End Using
+
+        Catch ex As Exception
+            ' Handle exception, e.g., display error message
+            MessageBox.Show("Error: " & ex.Message)
+        Finally
+            con.Close()
+        End Try
+    End Sub
+
+
+    'Private Sub Txt_Amound_KeyDown(sender As Object, e As KeyEventArgs) Handles Txt_Amound.KeyDown
+    '    If e.KeyCode = Keys.Enter Then
+    '        Try
+    '            ' Calculate the row index based on Txt_Slno
+    '            Dim rowIndex As Integer = Val(Txt_Slno.Text) - 1
+
+    '            ' Add a new row if the index exceeds the row count
+    '            If rowIndex >= DT_CLOSE.Rows.Count Then
+    '                DT_CLOSE.Rows.Add()
+    '            End If
+
+    '            ' Assign data to the cells in the DataGridView row
+    '            DT_CLOSE.Rows(rowIndex).Cells(PVColSlno).Value = Txt_Slno.Text
+    '            DT_CLOSE.Rows(rowIndex).Cells(PVColItemName).Value = cmb_Itemname.Text
+    '            DT_CLOSE.Rows(rowIndex).Cells(PVColQuantity).Value = Txt_QTY.Text
+    '            DT_CLOSE.Rows(rowIndex).Cells(PVColAmount).Value = Txt_Amound.Text
+
+    '            ' Clear the text boxes
+    '            funclear()
+
+    '            ' Increment Txt_Slno
+    '            Txt_Slno.Text = (Val(Txt_Slno.Text) + 1).ToString()
+
+    '            ' Set focus to the next row's ItemName textbox
+    '            If rowIndex + 1 < DT_CLOSE.Rows.Count Then
+    '                cmb_Itemname.Text = DT_CLOSE.Rows(rowIndex + 1).Cells(PVColItemName).Value.ToString()
+    '                Txt_QTY.Text = DT_CLOSE.Rows(rowIndex + 1).Cells(PVColQuantity).Value.ToString()
+    '                Txt_Amound.Text = DT_CLOSE.Rows(rowIndex + 1).Cells(PVColAmount).Value.ToString()
+    '                cmb_Itemname.Focus()
+    '            End If
+
+    '            ' Scroll DataGridView if necessary
+    '            If Val(Txt_Slno.Text) > 10 Then
+    '                DT_CLOSE.FirstDisplayedScrollingRowIndex = Val(Txt_Slno.Text) - 10
+    '            End If
+
+    '            ' Update DataGridView display
+    '            PlaceGrid(Val(Txt_Slno.Text) - 1)
+
+    '        Catch ex As Exception
+    '            MsgBox(ex.Message)
+    '        End Try
+    '    End If
+    'End Sub
+
+    'Private Sub Txt_Amound_KeyDown(sender As Object, e As KeyEventArgs) Handles Txt_Amound.KeyDown
+    '    If e.KeyCode = Keys.Enter Then ' Check if Enter key is pressed
+    '        Try
+    '            Dim rowIndex As Integer = Val(Txt_Slno.Text) - 1 ' Calculate the row index
+
+    '            If rowIndex >= 0 AndAlso rowIndex < DT_CLOSE.Rows.Count Then ' Check if the row index is valid
+    '                ' Assign data from text boxes to corresponding cells in the DataGridView
+    '                DT_CLOSE.Rows(rowIndex).Cells(PVColSlno).Value = Txt_Slno.Text
+    '                DT_CLOSE.Rows(rowIndex).Cells(PVColItemName).Value = cmb_Itemname.Text
+    '                DT_CLOSE.Rows(rowIndex).Cells(PVColQuantity).Value = Txt_QTY.Text
+    '                DT_CLOSE.Rows(rowIndex).Cells(PVColAmount).Value = Txt_Amound.Text
+
+    '                funclear() ' Clear the text boxes
+    '                Txt_Slno.Text = (Val(Txt_Slno.Text) + 1).ToString() ' Increment Slno
+    '                If rowIndex + 1 < DT_CLOSE.Rows.Count Then ' Check if next row exists
+    '                    ' Set focus to next row's ItemName textbox
+    '                    cmb_Itemname.Text = DT_CLOSE.Rows(rowIndex + 1).Cells(PVColItemName).Value.ToString()
+    '                    Txt_QTY.Text = DT_CLOSE.Rows(rowIndex + 1).Cells(PVColQuantity).Value.ToString()
+    '                    Txt_Amound.Text = DT_CLOSE.Rows(rowIndex + 1).Cells(PVColAmount).Value.ToString()
+    '                    cmb_Itemname.Focus()
+    '                End If
+    '            End If
+    '        Catch ex As Exception
+    '            MsgBox(ex.Message)
+    '        End Try
+    '    End If
+    'End Sub
+
+
+
 End Class
 'Dim cmdText As String = "INSERT INTO Bill_inf (BillNo, StaffID, entryDate, EntryTime, Amount, Cash, Card, Customer, Mobile, Place) 
 '  VALUES(@BillNo, @StaffID, @EntryDate, @EntryTime, @Amount, @Cash, @Card, @Customer, @Mobile, @Place)"

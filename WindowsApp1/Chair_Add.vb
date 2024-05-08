@@ -15,6 +15,10 @@ Public Class Chair_Add
         Edit_btn.ForeColor = Color.White
         Button12.BackColor = Color.DodgerBlue
         Button12.ForeColor = Color.White
+        Button1.BackColor = Color.DodgerBlue
+        Button1.ForeColor = Color.White
+        Panel10.Visible = False
+        Panel11.Visible = False
     End Sub
 
     Private Sub Exit_btn_Click(sender As Object, e As EventArgs) Handles Exit_btn.Click
@@ -142,12 +146,12 @@ Public Class Chair_Add
                     ' Clear input fields after deletion
                     ChairClear()
                     con.Close()
-                    Chair_Main.RefreshData()
+                    RefreshData()
                 Else
                     MsgBox("No data deleted. Chair ID not found.")
                 End If
 
-                Me.Hide()
+                ' Me.Hide()
             Catch ex As Exception
                 ' Handle exceptions, if any
                 MsgBox("An error occurred: " & ex.Message)
@@ -159,6 +163,50 @@ Public Class Chair_Add
                 con.Close()
             End Try
         End If
+    End Sub
+    Public Sub RefreshData()
+        ' Clear the DataGridView
+        DataGridView1.DataSource = Nothing
+
+        ' Re-fetch the data from the database and update the DataGridView
+        DataGridAdd("")
+    End Sub
+    Private Sub DataGridAdd(SearchString As String)
+        Try
+            con.ConnectionString = ConString
+            cmd = con.CreateCommand
+            If con.State = ConnectionState.Closed Then con.Open()
+            cmd.CommandText = "SELECT ID,ChairName,ChairType,StaffName FROM Chair"
+            If Trim(SearchString) <> "" Then
+                cmd.CommandText &= " WHERE ID LIKE '%" & SearchString & "%'"
+            End If
+            Dim dr As OleDbDataReader = cmd.ExecuteReader
+            ' Create a DataTable
+            Dim DT As New DataTable
+            DT.Columns.Add("ID")
+            DT.Columns.Add("ChairName")
+            DT.Columns.Add("ChairType")
+            DT.Columns.Add("StaffName")
+            ' DT.Columns.Add("Edit", GetType(Image))
+            While dr.Read()
+                ' Add rows to the DataTable
+                DT.Rows.Add(dr("ID"), dr("ChairName"), dr("ChairType"), dr("StaffName"))
+            End While
+
+            ', Tax, Details
+            dr.Close()
+            DataGridView1.DataSource = DT
+            DataGridView1.Columns("ID").Visible = False
+            DataGridView1.Columns("StaffName").Visible = False
+            'DataGridView1.Dock = DockStyle.Fill
+            '    DataGridView1.Anchor = AnchorStyles.Left Or AnchorStyles.Right Or AnchorStyles.Top
+        Catch ex As Exception
+            MessageBox.Show("Error: " & ex.Message)
+        Finally
+            If con.State = ConnectionState.Open Then
+                con.Close()
+            End If
+        End Try
     End Sub
     Private Sub Tabmovement(ByVal Keycode As Integer)
         If Keycode = 13 Then
@@ -175,18 +223,26 @@ Public Class Chair_Add
         Call Tabmovement(e.KeyCode)
     End Sub
 
-    Private Sub Chair_Add_Resize(sender As Object, e As EventArgs) Handles Me.Resize
-        Dim maxTextBoxPanelWidth As Integer = 700
-        Dim minpanelwidth As Integer = 544
-        If Me.WindowState = FormWindowState.Maximized Then
-            Panel11.Width = Math.Min(maxTextBoxPanelWidth, Me.Width)
-            Panel10.Width = Math.Min(maxTextBoxPanelWidth, Me.Width)
-            Txt_ChairName.Width = Panel11.Width - (2 * Txt_ChairName.Left)
-            Txt_ChairType.Width = Panel11.Width - (2 * Txt_ChairType.Left)
-        Else
-            Panel11.Width = Math.Min(minpanelwidth, Me.Width)
-            Panel10.Width = Math.Min(minpanelwidth, Me.Width)
+    'Private Sub Chair_Add_Resize(sender As Object, e As EventArgs) Handles Me.Resize
+    '    Dim maxTextBoxPanelWidth As Integer = 700
+    '    Dim minpanelwidth As Integer = 544
+    '    If Me.WindowState = FormWindowState.Maximized Then
+    '        Panel11.Width = Math.Min(maxTextBoxPanelWidth, Me.Width)
+    '        Panel10.Width = Math.Min(maxTextBoxPanelWidth, Me.Width)
+    '        Txt_ChairName.Width = Panel11.Width - (2 * Txt_ChairName.Left)
+    '        Txt_ChairType.Width = Panel11.Width - (2 * Txt_ChairType.Left)
+    '    Else
+    '        Panel11.Width = Math.Min(minpanelwidth, Me.Width)
+    '        Panel10.Width = Math.Min(minpanelwidth, Me.Width)
 
-        End If
+    '    End If
+    'End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+
+    End Sub
+
+    Private Sub Chair_Add_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
+
     End Sub
 End Class

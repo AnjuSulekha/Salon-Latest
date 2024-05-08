@@ -16,34 +16,102 @@ Public Class Master_Add
         Btn_Edit.BackColor = Color.DodgerBlue
         Btn_Edit.ForeColor = Color.White
         Button11.BackColor = Color.DodgerBlue
+
         Button11.ForeColor = Color.White
+
+        Button1.BackColor = Color.DodgerBlue
+        Button1.ForeColor = Color.White
         lbl_staff.Visible = False
+        Btn_Edit.Visible = True
+        Button11.Visible = True
+        DataGridAddView("")
+        Panel4.Visible = False
+        Panel5.Visible = False
+        Panel6.Visible = False
+        Panel7.Visible = False
+        Panel3.Visible = False
 
     End Sub
+    Private Sub DataGridAddView(SearchString As String)
+        Try
+            con.ConnectionString = ConString
+            If con.State = ConnectionState.Closed Then con.Open()
+            cmd = con.CreateCommand
+            cmd.CommandText = "SELECT Img,StaffName,Mobile,StaffID FROM StaffMaster"
+            If Trim(SearchString) <> "" Then
+                cmd.CommandText &= " WHERE StaffID LIKE '%" & SearchString & "%'"
+            End If
+            Dim dr As OleDbDataReader = cmd.ExecuteReader
 
-    Private Sub Master_Add_Resize(sender As Object, e As EventArgs) Handles Me.Resize
-        Dim maxTextBoxPanelWidth As Integer = 700
-        Dim minpanelwidth As Integer = 544
-        If Me.WindowState = FormWindowState.Maximized Then
-            Panel3.Width = Math.Min(maxTextBoxPanelWidth, Me.Width)
-            Panel4.Width = Math.Min(maxTextBoxPanelWidth, Me.Width)
-            Panel5.Width = Math.Min(maxTextBoxPanelWidth, Me.Width)
-            Panel6.Width = Math.Min(maxTextBoxPanelWidth, Me.Width)
-            Panel7.Width = Math.Min(maxTextBoxPanelWidth, Me.Width)
-            Txt_StaffName.Width = Panel3.Width - (2 * Txt_StaffName.Left)
-            Txt_Addrs.Width = Panel4.Width - (2 * Txt_Addrs.Left)
-            Txt_Email.Width = Panel5.Width - (2 * Txt_Email.Left)
-            Txt_Mobile.Width = Panel6.Width - (2 * Txt_Mobile.Left)
-            Txt_Salary.Width = Panel7.Width - (2 * Txt_Salary.Left)
-        Else
-            Panel3.Width = Math.Min(minpanelwidth, Me.Width)
-            Panel4.Width = Math.Min(minpanelwidth, Me.Width)
-            Panel5.Width = Math.Min(minpanelwidth, Me.Width)
-            Panel6.Width = Math.Min(minpanelwidth, Me.Width)
-            Panel7.Width = Math.Min(minpanelwidth, Me.Width)
-
-        End If
+            ' Create a DataTable
+            Dim DT As New DataTable
+            DT.Columns.Add("Image", GetType(Image)) ' Add a column for the image
+            DT.Columns.Add("StaffName")
+            DT.Columns.Add("Mobile") '
+            DT.Columns.Add("StaffID")
+            ' DT.Columns.Add("Edit", GetType(Image))
+            'Read Data And Load images
+            While dr.Read()
+                Dim imagePath As String = dr("Img").ToString()
+                If Not String.IsNullOrEmpty(imagePath) AndAlso File.Exists(imagePath) Then
+                    ' Load image only if the file path is not empty and the file exists
+                    Dim img As Image = Image.FromFile(imagePath)
+                    DT.Rows.Add(img, dr("StaffName"), dr("Mobile"), dr("StaffID"))
+                Else
+                    ' Handle invalid or missing file path
+                    DT.Rows.Add(Nothing, dr("StaffName"), dr("Mobile"), dr("StaffID"))
+                End If
+            End While
+            dr.Close()
+            DataGridView2.DataSource = DT
+            DataGridView2.Columns("StaffID").Visible = False
+        Catch ex As Exception
+            MessageBox.Show("Error: " & ex.Message)
+        Finally
+            If con.State = ConnectionState.Open Then
+                con.Close()
+            End If
+        End Try
     End Sub
+    Public Sub RefreshStaffData()
+        ' Clear the DataGridView
+        DataGridView2.DataSource = Nothing
+
+        ' Re-fetch the data from the database and update the DataGridView
+        DataGridAddView("")
+    End Sub
+    'Private Sub Master_Add_Resize(sender As Object, e As EventArgs) Handles Me.Resize
+    '    Dim maxTextBoxPanelWidth As Integer = 700
+    '    Dim minpanelwidth As Integer = 337
+    '    If Me.WindowState = FormWindowState.Maximized Then
+    '        Panel3.Width = Math.Min(maxTextBoxPanelWidth, Me.Width)
+    '        Panel4.Width = Math.Min(maxTextBoxPanelWidth, Me.Width)
+    '        Panel5.Width = Math.Min(maxTextBoxPanelWidth, Me.Width)
+    '        Panel6.Width = Math.Min(maxTextBoxPanelWidth, Me.Width)
+    '        Panel7.Width = Math.Min(maxTextBoxPanelWidth, Me.Width)
+    '        Txt_StaffName.Width = Panel3.Width - (2 * Txt_StaffName.Left)
+    '        Txt_Addrs.Width = Panel4.Width - (2 * Txt_Addrs.Left)
+    '        Txt_Email.Width = Panel5.Width - (2 * Txt_Email.Left)
+    '        Txt_Mobile.Width = Panel6.Width - (2 * Txt_Mobile.Left)
+    '        Txt_Salary.Width = Panel7.Width - (2 * Txt_Salary.Left)
+    '        Txt_Addrs2.Width = Panel7.Width - (2 * Txt_Salary.Left)
+    '        Txt_Addrs3.Width = Panel7.Width - (2 * Txt_Salary.Left)
+
+    '    Else
+    '        Panel3.Width = Math.Min(minpanelwidth, Me.Width)
+    '        Panel4.Width = Math.Min(minpanelwidth, Me.Width)
+    '        Panel5.Width = Math.Min(minpanelwidth, Me.Width)
+    '        Panel6.Width = Math.Min(minpanelwidth, Me.Width)
+    '        Panel7.Width = Math.Min(minpanelwidth, Me.Width)
+    '        Txt_StaffName.Width = Math.Min(minpanelwidth, Me.Width)
+    '        Txt_Addrs.Width = Math.Min(minpanelwidth, Me.Width)
+    '        Txt_Email.Width = Math.Min(minpanelwidth, Me.Width)
+    '        Txt_Mobile.Width = Math.Min(minpanelwidth, Me.Width)
+    '        Txt_Salary.Width = Math.Min(minpanelwidth, Me.Width)
+    '        Txt_Addrs2.Width = Math.Min(minpanelwidth, Me.Width)
+    '        Txt_Addrs3.Width = Math.Min(minpanelwidth, Me.Width)
+    '    End If
+    'End Sub
 
     Private Sub Btn_Reg_Click(sender As Object, e As EventArgs) Handles Btn_Reg.Click
         Try
@@ -101,17 +169,17 @@ Public Class Master_Add
                     PictureBox1.Image.Save(filePath)
                 End If
 
-                cmd.CommandText = "INSERT INTO StaffMaster (StaffName, Address, Email, Mobile, Salary, DOB, DOJ, Img) VALUES ('" & Me.Txt_StaffName.Text & "','" & Me.Txt_Addrs.Text & "','" & Me.Txt_Email.Text & "','" & Me.Txt_Mobile.Text & "'," & Val(Me.Txt_Salary.Text) & ",#" & Format(Me.DT_DOJ.Value, "dd-MM-yyyy") & "#,#" & Format(Me.DT_DOB.Value, "dd-MM-yyyy") & "#,'" & filePath & "')"
+                cmd.CommandText = "INSERT INTO StaffMaster (StaffName, Address, Email, Mobile, Salary, DOB, DOJ, Img,Address1,Address2) VALUES ('" & Me.Txt_StaffName.Text & "','" & Me.Txt_Addrs.Text & "','" & Me.Txt_Email.Text & "','" & Me.Txt_Mobile.Text & "'," & Val(Me.Txt_Salary.Text) & ",#" & Format(Me.DT_DOJ.Value, "dd-MM-yyyy") & "#,#" & Format(Me.DT_DOB.Value, "dd-MM-yyyy") & "#,'" & filePath & "','" & Me.Txt_Addrs2.Text & "','" & Me.Txt_Addrs3.Text & "')"
 
                 cmd.ExecuteNonQuery()
 
                 MsgBox("New Staff " + UCase(Me.Txt_StaffName.Text) + " Added")
                 CLEAR()
                 con.Close()
-                Master_Form.RefreshStaffData()
+                RefreshStaffData()
 
             End If
-            Me.Hide()
+            ' Me.Hide()
         Catch ex As Exception
             MsgBox("Database error: " & ex.Message)
         Finally
@@ -186,8 +254,8 @@ Public Class Master_Add
                 MsgBox("Staff details updated successfully")
                 CLEAR()
                 con.Close()
-                Master_Form.RefreshStaffData()
-                Me.Hide()
+                RefreshStaffData()
+                'Me.Hide()
             End If
             'Panel9.Visible = True
             'Panel9.BringToFront()
@@ -234,8 +302,8 @@ Public Class Master_Add
             'Panel9.Visible = True
             'Panel9.BringToFront()
             'Panel9.Show()
-            Me.Hide()
-            Master_Form.RefreshStaffData()
+            'Me.Hide()
+            RefreshStaffData()
         Catch ex As Exception
             ' Handle exceptions, if any
             MsgBox("An error occurred: " & ex.Message)
@@ -353,37 +421,54 @@ Public Class Master_Add
         End Try
     End Sub
 
-    Public Sub LoadFormData()
+    Public Sub LoadFormData(staffId As Integer)
         Try
-            If lbl_staff.Text <> "" Then
-                con.ConnectionString = ConString
-                cmd = con.CreateCommand
-                If con.State = ConnectionState.Closed Then con.Open()
-                If lbl_staff.Text <> "" Then
-                    cmd.CommandText = "select * from StaffMaster where StaffID=" & Val(Me.lbl_staff.Text) & ""
-                    dr = cmd.ExecuteReader
-                    dr.Read()
-                    If dr.HasRows = True Then
-                        Me.Txt_StaffName.Text = dr("StaffName").ToString()
-                        Me.Txt_Addrs.Text = dr("Address").ToString()
-                        Me.Txt_Email.Text = dr("Email").ToString()
-                        Me.Txt_Mobile.Text = dr("Mobile").ToString()
-                        Me.Txt_Salary.Text = dr("Salary").ToString()
-                        Me.DT_DOJ.Value = dr("DOJ").ToString()
-                        Me.DT_DOB.Value = dr("DOB").ToString()
-                        Dim imagePath As String = dr("Img").ToString()
-                        If Not String.IsNullOrEmpty(imagePath) AndAlso File.Exists(imagePath) Then
-                            ' Load image only if the file path is not empty and the file exists
-                            Me.PictureBox1.SizeMode = PictureBoxSizeMode.StretchImage
-                            Me.PictureBox1.Image = Image.FromFile(imagePath)
-                        End If
-                        dr.Close()
-                    End If
+            ' If lbl_staff.Text <> "" Then
+            con.ConnectionString = ConString
+            cmd = con.CreateCommand
+            If con.State = ConnectionState.Closed Then con.Open()
+            ' If lbl_staff.Text <> "" Then
+            'cmd.CommandText = "select * from StaffMaster where StaffID=" & Val(Me.lbl_staff.Text) & ""
+
+            cmd.CommandText = "SELECT * FROM StaffMaster WHERE StaffID = @StaffID"
+            cmd.Parameters.AddWithValue("@StaffID", staffId)
+            dr = cmd.ExecuteReader
+            dr.Read()
+            If dr.HasRows = True Then
+                Me.Txt_StaffName.Text = dr("StaffName").ToString()
+                Me.Txt_Addrs.Text = dr("Address").ToString()
+                Me.Txt_Email.Text = dr("Email").ToString()
+                Me.Txt_Mobile.Text = dr("Mobile").ToString()
+                Me.Txt_Salary.Text = dr("Salary").ToString()
+                'Me.DT_DOJ.Value = dr("DOJ").ToString()
+                'Me.DT_DOB.Value = dr("DOB").ToString()
+                If Not IsDBNull(dr("DOJ")) Then
+                    Me.DT_DOJ.Value = Convert.ToDateTime(dr("DOJ"))
                 Else
-                    MsgBox("hi")
+                    Me.DT_DOJ.Value = DateTime.Today
                 End If
+
+                If Not IsDBNull(dr("DOB")) Then
+                    Me.DT_DOB.Value = Convert.ToDateTime(dr("DOB"))
+                Else
+                    Me.DT_DOB.Value = DateTime.Today
+                End If
+                'Me.DT_DOJ.Value = If(IsDBNull(dr("DOJ")), DateTime.MinValue, Convert.ToDateTime(dr("DOJ")))
+                'Me.DT_DOB.Value = If(IsDBNull(dr("DOB")), DateTime.MinValue, Convert.ToDateTime(dr("DOB")))
+                Dim imagePath As String = dr("Img").ToString()
+                If Not String.IsNullOrEmpty(imagePath) AndAlso File.Exists(imagePath) Then
+                    ' Load image only if the file path is not empty and the file exists
+                    Me.PictureBox1.SizeMode = PictureBoxSizeMode.StretchImage
+                    Me.PictureBox1.Image = Image.FromFile(imagePath)
+                End If
+                dr.Close()
             End If
+            ' Else
+            ' MsgBox("hi")
+            ' End If
+            ' End If
         Catch ex As Exception
+            MsgBox("ERROR:" & ex.Message)
         Finally
             If con.State = ConnectionState.Open Then
                 con.Close()
@@ -393,5 +478,49 @@ Public Class Master_Add
 
     Private Sub Master_Add_RegionChanged(sender As Object, e As EventArgs) Handles Me.RegionChanged
 
+    End Sub
+
+    Private Sub Label2_Click(sender As Object, e As EventArgs) Handles Label2.Click
+
+    End Sub
+
+    Private Sub Panel5_Paint(sender As Object, e As PaintEventArgs) Handles Panel5.Paint
+
+    End Sub
+
+    Private Sub DataGridView2_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView2.CellContentClick
+        'If DataGridView2.SelectedRows.Count > 0 Then
+        '    LoadFormData()
+
+        'End If
+        If e.RowIndex >= 0 AndAlso e.ColumnIndex >= 0 Then
+            Dim staffId As Integer = Convert.ToInt32(DataGridView2.Rows(e.RowIndex).Cells("StaffID").Value)
+            lbl_staff.Text = staffId
+            LoadFormData(staffId)
+        End If
+    End Sub
+
+    Private Sub DataGridView2_DoubleClick(sender As Object, e As EventArgs) Handles DataGridView2.DoubleClick
+
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        CLEAR()
+    End Sub
+
+    Private Sub Txt_Addrs2_TextChanged(sender As Object, e As EventArgs) Handles Txt_Addrs2.TextChanged
+
+    End Sub
+
+    Private Sub Txt_Addrs2_KeyDown(sender As Object, e As KeyEventArgs) Handles Txt_Addrs2.KeyDown
+        Call Tabmovement(e.KeyCode)
+    End Sub
+
+    Private Sub Txt_Addrs3_TextChanged(sender As Object, e As EventArgs) Handles Txt_Addrs3.TextChanged
+
+    End Sub
+
+    Private Sub Txt_Addrs3_KeyDown(sender As Object, e As KeyEventArgs) Handles Txt_Addrs3.KeyDown
+        Call Tabmovement(e.KeyCode)
     End Sub
 End Class

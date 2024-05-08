@@ -53,36 +53,36 @@ Public Class Master_Form
         End Try
     End Sub
     'DATAGRIDVIEW EDIT ICON [STAFF]
-    Private Sub DataGridView2_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles DataGridView2.CellPainting
-        ' Check if the cell being painted is in the "Edit" column
-        If e.ColumnIndex = DataGridView2.Columns("Edit").Index AndAlso e.RowIndex >= 0 Then
-            ' Get the edit icon image
-            Dim editIcon As Image = My.Resources.Edit ' Assuming "EditIcon" is the name of your icon resource
+    'Private Sub DataGridView2_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles DataGridView2.CellPainting
+    '    ' Check if the cell being painted is in the "Edit" column
+    '    If e.ColumnIndex = DataGridView2.Columns("Edit").Index AndAlso e.RowIndex >= 0 Then
+    '        ' Get the edit icon image
+    '        Dim editIcon As Image = My.Resources.Edit ' Assuming "EditIcon" is the name of your icon resource
 
-            ' Calculate the position to draw the icon
-            Dim iconX As Integer = e.CellBounds.Left + 2 ' Adjust the X position as needed
-            Dim iconY As Integer = e.CellBounds.Top + (e.CellBounds.Height - editIcon.Height) / 2 ' Center vertically
+    '        ' Calculate the position to draw the icon
+    '        Dim iconX As Integer = e.CellBounds.Left + 2 ' Adjust the X position as needed
+    '        Dim iconY As Integer = e.CellBounds.Top + (e.CellBounds.Height - editIcon.Height) / 2 ' Center vertically
 
-            ' Draw the cell's background
-            e.PaintBackground(e.CellBounds, False)
+    '        ' Draw the cell's background
+    '        e.PaintBackground(e.CellBounds, False)
 
-            ' Draw the icon to the left of the cell
-            e.Graphics.DrawImage(editIcon, iconX, iconY)
+    '        ' Draw the icon to the left of the cell
+    '        e.Graphics.DrawImage(editIcon, iconX, iconY)
 
-            ' Suppress default painting of the cell content
-            e.Handled = True
-        End If
-    End Sub
+    '        ' Suppress default painting of the cell content
+    '        e.Handled = True
+    '    End If
+    'End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Master_Add.MdiParent = Form1
         Master_Add.BringToFront()
         Master_Add.Show()
-        Master_Add.Lbl_Reg.Visible = True
-        Master_Add.Lbl_Edit.Visible = False
-        Master_Add.Btn_Reg.Visible = True
-        Master_Add.Btn_Edit.Visible = False
-        Master_Add.Btn_Exit.Location = New Point(270, 376)
+        'Master_Add.Lbl_Reg.Visible = True
+        'Master_Add.Lbl_Edit.Visible = False
+        'Master_Add.Btn_Reg.Visible = True
+        'Master_Add.Btn_Edit.Visible = False
+        'Master_Add.Btn_Exit.Location = New Point(270, 376)
 
     End Sub
     Public Sub RefreshStaffData()
@@ -103,9 +103,9 @@ Public Class Master_Form
                 Master_Add.MdiParent = Form1
                 Master_Add.Show()
                 Master_Add.BringToFront()
-                If Master_Add.Visible Then
-                    Master_Add.LoadFormData() ' Load data when the form becomes visible
-                End If
+                'If Master_Add.Visible Then
+                '    Master_Add.LoadFormData() ' Load data when the form becomes visible
+                'End If
             End If
             Master_Add.Lbl_Reg.Visible = False
             Master_Add.Lbl_Edit.Visible = True

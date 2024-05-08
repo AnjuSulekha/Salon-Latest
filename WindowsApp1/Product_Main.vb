@@ -60,12 +60,12 @@ Public Class Product_Main
         Product_Add.Show()
         Product_Add.BringToFront()
 
-        Product_Add.lbl_Nproduct.Visible = True
-        Product_Add.Btn_product.Visible = True
-        Product_Add.Button8.Visible = True
-        Product_Add.Button8.Location = New Point(278, 369)
-        Product_Add.Label18.Visible = False
-        Product_Add.DeleteProduct.Visible = False
+        'Product_Add.lbl_Nproduct.Visible = True
+        'Product_Add.Btn_product.Visible = True
+        'Product_Add.Button8.Visible = True
+        'Product_Add.Button8.Location = New Point(278, 369)
+        'Product_Add.Label18.Visible = False
+        'Product_Add.DeleteProduct.Visible = False
 
 
 
@@ -144,7 +144,7 @@ Public Class Product_Main
                 Product_Add.MdiParent = Form1
                 Product_Add.Show()
                 Product_Add.BringToFront()
-                Product_Add.LoadProductData()
+                'Product_Add.LoadProductData()
                 'Product_Add.Button8.Location = New Point(381, 369)
             End If
         End If

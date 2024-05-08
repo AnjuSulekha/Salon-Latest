@@ -82,13 +82,13 @@ Public Class Chair_Main
                 Chair_Add.MdiParent = Form1
                 Chair_Add.Show()
                 Chair_Add.BringToFront()
-                Chair_Add.lbl_Update.Visible = True
-                Chair_Add.Label11.Visible = False
-                Chair_Add.Button7.Visible = False
-                Chair_Add.Edit_btn.Visible = True
-                Chair_Add.Button7.Visible = False
-                Chair_Add.Button12.Visible = True
-                Chair_Add.Exit_btn.Location = New Point(395, 270)
+                'Chair_Add.lbl_Update.Visible = True
+                'Chair_Add.Label11.Visible = False
+                'Chair_Add.Button7.Visible = False
+                'Chair_Add.Edit_btn.Visible = True
+                'Chair_Add.Button7.Visible = False
+                'Chair_Add.Button12.Visible = True
+                'Chair_Add.Exit_btn.Location = New Point(395, 270)
                 Chair_Add.LoadChairData()
 
             End If

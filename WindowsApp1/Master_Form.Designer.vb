@@ -96,7 +96,7 @@ Partial Class Master_Form
         DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.DataGridView2.DefaultCellStyle = DataGridViewCellStyle3
         Me.DataGridView2.EnableHeadersVisualStyles = False
-        Me.DataGridView2.Location = New System.Drawing.Point(107, 27)
+        Me.DataGridView2.Location = New System.Drawing.Point(12, 12)
         Me.DataGridView2.Name = "DataGridView2"
         Me.DataGridView2.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
         DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
